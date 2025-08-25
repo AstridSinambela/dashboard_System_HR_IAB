@@ -6,6 +6,18 @@ function checkLogin() {
   }
 }
 
+  document.addEventListener("DOMContentLoaded", () => {
+  const currentPage = window.location.pathname.split("/").pop();
+  const menuLinks = document.querySelectorAll(".offcanvas-body .nav-link");
+
+  menuLinks.forEach(link => {
+    const linkPage = link.getAttribute("href");
+    if (linkPage === currentPage) {
+      link.classList.add("active");
+    }
+  });
+});
+
 // ================ Search Operator by NIK ================
 // IAB.js — View-only script for IAB.html
 'use strict';
@@ -345,6 +357,76 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const op = await resOp.json();
 
+      // get certification record
+      try {
+        const certResponse = await fetch(`/api/operator/iab?nik=${nik}`);
+        if (certResponse.ok) {
+            const cert = await certResponse.json();
+            // Isi field Soldering
+            const sInputs = document.querySelectorAll(".cert-soldering input");
+            sInputs[0].value = cert.soldering_written ?? "";
+            sInputs[1].value = cert.soldering_practical ?? "";
+            sInputs[2].value = cert.soldering_result ?? "";
+
+            // Isi Screwing
+            const scInputs = document.querySelectorAll(".cert-screwing input");
+            scInputs[0].value = cert.screwing_technique ?? "";
+            scInputs[1].value = cert.screwing_work ?? "";
+            scInputs[2].value = cert.screwing_result ?? "";
+
+            // Screening
+            const screening = document.querySelectorAll(".cert-screening input");
+            screening[0].value = cert.ds_tiu ?? "";
+            screening[1].value = cert.ds_accu ?? "";
+            screening[2].value = cert.ds_heco ?? "";
+            screening[3].value = cert.ds_mcc ?? "";
+            screening[4].value = cert.ds_result ?? "";
+
+            // Line Sim
+            document.querySelector(".cert-line-process").value = cert.process ?? "";
+            document.querySelector(".cert-line-target").value = cert.ls_target ?? "";
+            document.querySelector(".cert-line-actual").value = cert.ls_actual ?? "";
+            document.querySelector(".cert-line-achievement").value = cert.ls_achievement ?? "";
+            document.querySelector(".cert-line-result").value = cert.ls_result ?? "";
+
+            // MSA
+            const msaInputs = document.querySelectorAll(".msa-score");
+            msaInputs[0].value = cert.msa_accuracy ?? "";
+            msaInputs[1].value = cert.msa_missrate ?? "";
+            msaInputs[2].value = cert.msa_falsealarm ?? "";
+            msaInputs[3].value = cert.msa_confidence ?? "";
+            document.getElementById("msa-result").value = cert.msa_result ?? "";
+
+            // Certification skills table
+            document.querySelector("#uploadCertTable .form-upload-docno").value = cert.document_number ?? "";
+            document.querySelector(".upload-training").value = cert.training_date ?? "";
+            document.querySelector(".upload-expired").value = cert.expired_date ?? "";
+            document.querySelector("#uploadCertTable .upload-status span").textContent = cert.status ?? "";
+
+            // Tambahkan tombol untuk membuka PDF setiap file jika tersedia
+            function addViewBtn(index, fileBase64) {
+                if (!fileBase64) return;
+                const row = document.querySelectorAll("#uploadCertTable tbody tr")[index];
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "btn btn-sm btn-primary ms-2";
+                btn.innerText = "View File";
+                btn.addEventListener("click", () => {
+                    const blob = base64ToBlob(fileBase64, 'application/pdf');
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                });
+                row.querySelector(".btn-upload-trigger").after(btn);
+            }
+            addViewBtn(0, cert.file_soldering);
+            addViewBtn(1, cert.file_screwing);
+            addViewBtn(2, cert.file_msa);
+        }
+    } catch(err) {
+        console.error("Error fetching certification data", err);
+    }
+  
+// end
       
 
 

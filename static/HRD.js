@@ -14,14 +14,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   navLinks.forEach(link => {
     const linkPath = normalizePath(link.getAttribute("href"));
-    if (linkPath === currentPath) {
-      link.classList.add("active");
-    }
+    if (linkPath === currentPath) {link.classList.add("active");    }
     console.log("path:", window.location.pathname);
 
   });
+
+   if (localStorage.getItem("showToast") === "true") {
+    alert("Data berhasil disimpan!"); // atau munculkan toast
+    localStorage.removeItem("showToast");
+  }
 });
 
+// >>> helper: ubah "YYYY-MM-DD" atau Date ke "MM/DD/YYYY"
+function formatDateToMMDDYYYY(dateStr) {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${month}/${day}/${year}`;
+}
 
 // ==================== Upload File ====================
 function fileToBase64(file) {
@@ -35,43 +44,59 @@ function fileToBase64(file) {
 
 // Upload file to server
 async function uploadFile(nik, index, certificationType) {
-    const fileInput = document.querySelectorAll(".form-upload")[index];
-    const docNo = document.querySelectorAll(".form-upload-docno")[index].value;
-    const trainingDate = document.querySelectorAll(".upload-training")[index].value;
-    const expiredDate = document.querySelectorAll(".upload-expired")[index].value;
-    const statusSpan = document.querySelectorAll(".upload-status span")[index];
-    const status = statusSpan.innerText.includes("Pass") ? "Pass" : "Not Yet";
+  const fileInput    = document.querySelectorAll(".form-upload")[index];
+  const docNo        = document.querySelectorAll(".form-upload-docno")[index].value;
+  const trainingDate = document.querySelectorAll(".upload-training")[index].value;
+  const expiredDate  = document.querySelectorAll(".upload-expired")[index].value;
+  const statusSpan   = document.querySelectorAll(".upload-status span")[index];
+  const status       = statusSpan?.innerText.includes("Pass") ? "Pass" : "Not Yet";
 
-    const file = fileInput.files[0];
-    if (!file) {
-        console.warn(`No file selected for ${certificationType}`);
-        return;
-    }
+  const file = fileInput.files[0];
+  if (!file) {
+    console.warn(`No file selected for ${certificationType}`);
+    return;
+  }
 
-    const base64File = await fileToBase64(file);
+  const base64File = await fileToBase64(file);
 
-    const payload = {
-        nik,
-        certification_type: certificationType,
-        document_number: docNo,
-        training_date: trainingDate,
-        expired_date: expiredDate,
-        status,
-        file_base64: base64File
-    };
+  // >>> payload sesuai tipe + tanggal ke MM/DD/YYYY
+  let payload = { nik, status };
+  const t = formatDateToMMDDYYYY(trainingDate);
+  const e = formatDateToMMDDYYYY(expiredDate);
 
-    const res = await fetch("/api/certification/upload", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
+  if (certificationType === "Soldering") {
+    Object.assign(payload, {
+      soldering_docno: docNo,
+      soldering_traindate: t,
+      soldering_expdate: e,
+      file_soldering: base64File
     });
+  } else if (certificationType === "Screwing") {
+    Object.assign(payload, {
+      screwing_docno: docNo,
+      screwing_traindate: t,
+      screwing_expdate: e,
+      file_screwing: base64File
+    });
+  } else if (certificationType === "MSA") {
+    Object.assign(payload, {
+      msa_docno: docNo,
+      msa_traindate: t,
+      msa_expdate: e,
+      file_msa: base64File
+    });
+  } else {
+    console.warn("Unknown certificationType:", certificationType);
+  }
 
-    if (!res.ok) {
-        throw new Error(`Failed to upload file for ${certificationType}`);
-    }
+  const res = await fetch("/api/certification/upload", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(payload)
+  });
 
-    //const result = await res.json();
-    console.log(`${certificationType} file uploaded successfully.`);
+  if (!res.ok) throw new Error(`Failed to upload file for ${certificationType}`);
+  console.log(`${certificationType} file uploaded successfully.`);
 }
 
 // ==================== Validasi Sebelum Simpan ====================
@@ -349,43 +374,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const rows = table.querySelectorAll("tbody tr");
 
   rows.forEach(row => {
-    const docNoInput = row.querySelector(".form-upload-docno");
-    const fileInput = row.querySelector(".form-upload");
-    const trainInput = row.querySelector(".upload-training");
-    const expireInput = row.querySelector(".upload-expired");
-    const statusCell = row.querySelector(".upload-status");
+  const docNoInput = row.querySelector(".form-upload-docno");
+  const fileInput = row.querySelector(".form-upload");
+  const trainInput = row.querySelector(".upload-training");
+  const expireInput = row.querySelector(".upload-expired");
+  const statusCell = row.querySelector(".upload-status");
 
-    const checkStatus = () => {
-      const isDocFilled = docNoInput.value.trim() !== "";
-      const isFileFilled = fileInput.files.length > 0;
-      const isTrainFilled = trainInput.value.trim() !== "";
-      const isExpireFilled = expireInput.value.trim() !== "";
+  const checkStatus = () => {
+    const isDocFilled = docNoInput.value.trim() !== "";
+    const isFileFilled = fileInput.files.length > 0;
+    const isTrainFilled = trainInput.value.trim() !== "";
+    const isExpireFilled = expireInput.value.trim() !== "";
 
-      if (isDocFilled && isFileFilled && isTrainFilled && isExpireFilled) {
-        statusCell.innerHTML = `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>`;
-      } else {
-        statusCell.innerHTML = `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
-      }
-    };
+    const isPdf = fileInput.files[0]?.type === "application/pdf";
+    const isSizeValid = fileInput.files[0]?.size <= 1024 * 1024;
+    const isFileValid = isPdf && isSizeValid;
 
-    // Trigger status check on input changes
-    [docNoInput, fileInput, trainInput, expireInput].forEach(input => {
-      input.addEventListener("input", checkStatus);
-      input.addEventListener("change", checkStatus);
-    });
+    if (isDocFilled && isFileFilled && isFileValid && isTrainFilled && isExpireFilled) {
+      statusCell.innerHTML = `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>`;
+    } else {
+      statusCell.innerHTML = `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
+    }
+  };
 
-    // Initial check on page load
-    checkStatus();
-    const isFileValid = fileInput.dataset.valid === "true";
+  [docNoInput, fileInput, trainInput, expireInput].forEach(input => {
+    input.addEventListener("input", checkStatus);
+    input.addEventListener("change", checkStatus);
+  });
 
-if (isDocFilled && isFileFilled && isFileValid && isTrainFilled && isExpireFilled) {
-  statusCell.innerHTML = `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>`;
-} else {
-  statusCell.innerHTML = `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
-}
+  // ✅ PANGGIL DI SINI AGAR VARIABEL ADA
+  checkStatus();
+});
 
   });
-});
+
+
 
 // =============== Upload Documents Button ===============
 document.addEventListener("DOMContentLoaded", () => {
@@ -421,6 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       fileInput.dataset.valid = "true";
+      fileInput.dispatchEvent(new Event("input", { bubbles: true }));
 
       // Reset progress bar
       progressContainer.classList.remove("d-none");
@@ -456,27 +480,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     // Open base64 PDF in a new window
-  function base64ToBlob(base64, mimeType = 'application/pdf') {
-    const binary = atob(base64);
-    const len = binary.length;
-    const buffer = new Uint8Array(len);
-    for (let i = 0; i < len; i++) buffer[i] = binary.charCodeAt(i);
-    return new Blob([buffer], { type: mimeType });
+ function openBase64Pdf(base64) {
+  const binary = atob(base64);
+  const len = binary.length;
+  const buffer = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    buffer[i] = binary.charCodeAt(i);
   }
-  function openBase64Pdf(base64) {
-    if (!base64) {
-      alert('No file data available to display.');
-      return;
-    }
-    try {
-      const blob = base64ToBlob(base64, 'application/pdf');
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-    } catch (err) {
-      console.error('Failed to open PDF:', err);
-      alert('Unable to open PDF file. The file may be corrupted.');
-    }
-  }
+  const blob = new Blob([buffer], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+}
+
 
   });
 });
@@ -484,7 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// =============== AJAX Request for Search Button based on NIK ===============
+// =============== SEARCH BY NIK (COMBINED ENDPOINT)  ===============
 document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.getElementById("search-nik-btn");
     const nikInput = document.getElementById("nik");
@@ -520,6 +535,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "Enter") {
             searchOperator();
         }
+
+    
     });
 
     function showNikTooltip(message) {
@@ -558,6 +575,167 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+// >>> BARU: isi semua field dari certification
+function fillCertificationForm(cert) {
+  // ---- Soldering ----
+  const solderingInputs = document.querySelectorAll(".cert-soldering input");
+  if (solderingInputs.length >= 3) {
+    solderingInputs[0].value = cert.soldering_written ?? "";
+    solderingInputs[1].value = cert.soldering_practical ?? "";
+    solderingInputs[2].value = cert.soldering_result ?? "";
+    applyResultColor(solderingInputs[2], solderingInputs[2].value);
+  }
+
+  // ---- Screwing ----
+  const screwingInputs = document.querySelectorAll(".cert-screwing input");
+  if (screwingInputs.length >= 3) {
+    screwingInputs[0].value = cert.screwing_technique ?? "";
+    screwingInputs[1].value = cert.screwing_work ?? "";
+    screwingInputs[2].value = cert.screwing_result ?? "";
+    applyResultColor(screwingInputs[2], screwingInputs[2].value);
+  }
+
+  // ---- Data Screening ----
+  const screeningInputs = document.querySelectorAll(".cert-screening input");
+  if (screeningInputs.length >= 5) {
+    screeningInputs[0].value = cert.ds_tiu ?? "";
+    screeningInputs[1].value = cert.ds_accu ?? "";
+    screeningInputs[2].value = cert.ds_heco ?? "";
+    screeningInputs[3].value = cert.ds_mcc ?? "";
+    screeningInputs[4].value = cert.ds_result ?? "";
+    applyResultColor(screeningInputs[4], screeningInputs[4].value);
+  }
+
+  // ---- Line Simulation ----
+  const processSelect = document.querySelector(".cert-line-process");
+  const targetInput   = document.querySelector(".cert-line-target");
+  const actualInput   = document.querySelector(".cert-line-actual");
+  const achieveInput  = document.querySelector(".cert-line-achievement");
+  const resultInput   = document.querySelector(".cert-line-result");
+
+  if (processSelect) processSelect.value = cert.process || "";
+  if (targetInput)   targetInput.value   = cert.ls_target ?? "";
+  if (actualInput)   actualInput.value   = cert.ls_actual ?? "";
+
+  if (achieveInput) {
+    // Tampilkan dengan " %", biar konsisten sama kalkulasi existing
+    const ach = cert.ls_achievement;
+    achieveInput.value = (ach === null || ach === undefined) ? "" : `${parseFloat(ach).toFixed(1)} %`;
+  }
+  if (resultInput) {
+    resultInput.value = cert.ls_result ?? "";
+    applyResultColor(resultInput, resultInput.value);
+  }
+
+  // ---- MSA Assessment ----
+  const msaScores = document.querySelectorAll(".msa-score");
+  if (msaScores.length >= 4) {
+    msaScores[0].value = cert.msaa_accuracy ?? "";
+    msaScores[1].value = cert.msaa_missrate ?? "";
+    msaScores[2].value = cert.msaa_falsealarm ?? "";
+    msaScores[3].value = cert.msaa_confidence ?? "";
+  }
+  const msaResult = document.getElementById("msa-result");
+  if (msaResult) {
+    msaResult.value = cert.msaa_result ?? "";
+    applyResultColor(msaResult, msaResult.value);
+  }
+
+  // ---- Certification Skills table (doc no, training, expired, status) ----
+  const docNos       = document.querySelectorAll(".form-upload-docno");
+  const trainingDates= document.querySelectorAll(".upload-training");
+  const expiredDates = document.querySelectorAll(".upload-expired");
+  if (docNos[0])       docNos[0].value       = cert.soldering_docno ?? "";
+  if (trainingDates[0])trainingDates[0].value= cert.soldering_traindate ?? "";
+  if (expiredDates[0]) expiredDates[0].value = cert.soldering_expdate ?? "";
+
+  if (docNos[1]) docNos[1].value = cert.screwing_docno ?? "";
+  if (trainingDates[1]) trainingDates[1].value = cert.screwing_traindate ?? "";
+  if (expiredDates[1]) expiredDates[1].value = cert.screwing_expdate ?? "";
+
+  if (docNos[2]) docNos[2].value = cert.msa_docno ?? "";
+  if (trainingDates[2]) trainingDates[2].value = cert.msa_traindate ?? "";
+  if (expiredDates[2]) expiredDates[2].value = cert.msa_expdate ?? "";
+
+  // Set status setiap baris berdasarkan ada/tidaknya file base64 yang tersimpan
+  const rows = document.querySelectorAll("#uploadCertTable tbody tr");
+  if (rows[0]) rows[0].querySelector(".upload-status").innerHTML =
+    cert.file_soldering ? `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>` 
+                        : `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
+  if (rows[1]) rows[1].querySelector(".upload-status").innerHTML =
+    cert.file_screwing ? `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>` 
+                       : `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
+  if (rows[2]) rows[2].querySelector(".upload-status").innerHTML =
+    cert.file_msa ? `<span class="status-pass"><i class="bi bi-check-circle-fill"></i> Pass</span>` 
+                  : `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
+
+  // Trigger kalkulasi & pewarnaan ulang supaya UI konsisten
+  attachScoreListeners();
+  evaluateScreeningResult();
+  evaluateMSAResult();
+}
+
+// >>> BARU: reset field kalau tidak ada certification
+function clearCertificationForm() {
+  // Soldering
+  document.querySelectorAll(".cert-soldering input").forEach((el, idx) => {
+    el.value = "";
+    if (idx === 2) applyResultColor(el, ""); // clear color
+  });
+
+  // Screwing
+  document.querySelectorAll(".cert-screwing input").forEach((el, idx) => {
+    el.value = "";
+    if (idx === 2) applyResultColor(el, "");
+  });
+
+  // Screening
+  document.querySelectorAll(".cert-screening input").forEach((el, idx) => {
+    el.value = "";
+    if (idx === 4) applyResultColor(el, "");
+  });
+
+  // Line Simulation
+  const lsRes = document.querySelector(".cert-line-result");
+  if (document.querySelector(".cert-line-process")) document.querySelector(".cert-line-process").value = "";
+  if (document.querySelector(".cert-line-target")) document.querySelector(".cert-line-target").value = "";
+  if (document.querySelector(".cert-line-actual")) document.querySelector(".cert-line-actual").value = "";
+  if (document.querySelector(".cert-line-achievement")) document.querySelector(".cert-line-achievement").value = "";
+  if (lsRes) { lsRes.value = ""; applyResultColor(lsRes, ""); }
+
+  // MSA
+  document.querySelectorAll(".msa-score").forEach(el => el.value = "");
+  const msaResult = document.getElementById("msa-result");
+  if (msaResult) { msaResult.value = ""; applyResultColor(msaResult, ""); }
+
+  // Certification Skills table
+  const docNos        = document.querySelectorAll(".form-upload-docno");
+  const trainingDates = document.querySelectorAll(".upload-training");
+  const expiredDates  = document.querySelectorAll(".upload-expired");
+
+  // Soldering
+  if (docNos[0])        docNos[0].value        = "";
+  if (trainingDates[0]) trainingDates[0].value = "";
+  if (expiredDates[0])  expiredDates[0].value  = "";
+
+  // Screwing
+  if (docNos[1])        docNos[1].value        = "";
+  if (trainingDates[1]) trainingDates[1].value = "";
+  if (expiredDates[1])  expiredDates[1].value  = "";
+
+  // MSA
+  if (docNos[2])        docNos[2].value        = "";
+  if (trainingDates[2]) trainingDates[2].value = "";
+  if (expiredDates[2])  expiredDates[2].value  = "";
+
+  const rows = document.querySelectorAll("#uploadCertTable tbody tr");
+  rows.forEach(row => {
+    const statusCell = row.querySelector(".upload-status");
+    if (statusCell) statusCell.innerHTML = `<span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span>`;
+  });
+}
+
+
 
 
     // ==================== Form Status ====================
@@ -592,7 +770,7 @@ document.addEventListener("DOMContentLoaded", () => {
         spinner.style.display = "inline-block";
 
         try {
-            const response = await fetch(`/api/operator/hrd?nik=${nik}`);
+            const response = await fetch(`/api/hrd/operator?nik=${nik}`);
             if (!response.ok) throw new Error("Operator not found");
 
             const data = await response.json();
@@ -615,6 +793,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             updateFormStatus(data.form_status);
+            // >>> TAMBAHAN: isi form certification kalau ada datanya
+            if (data.certification) {
+              fillCertificationForm(data.certification);
+            } else {
+              clearCertificationForm();
+            }
+
 
         } catch (error) {
             console.error("Search error:", error);
@@ -627,8 +812,6 @@ document.addEventListener("DOMContentLoaded", () => {
           operatorTooltip.classList.add("d-none");
           nikInput.classList.remove("is-invalid");
           }, 3000);
-
-
 
             nameInput.value = "";
             lineInput.value = "";
@@ -643,6 +826,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
             //console.error("Error fetching operator:", error);
             updateFormStatus(null);
+            clearCertificationForm(); // >>> kosongkan form cert kalau gagal cari
+
 
           } finally {
             spinner.style.display = "none";
@@ -650,10 +835,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+function fetchCertification(nik, type) {
+  fetch(`/api/certification/${nik}`)
+    .then(res => res.json())
+    .then(cert => {
+      if (!cert) return;
 
+      // mapping field sesuai type
+      const docField   = `${type}_docno`;
+      const trainField = `${type}_traindate`;
+      const expField   = `${type}_expdate`;
 
-
-
+      // mapping ID elemen input dengan suffix type
+      document.getElementById(`docNumber_${type}`).value    = cert[docField]   || "-";
+      document.getElementById(`trainingDate_${type}`).value = cert[trainField] || "-";
+      document.getElementById(`expiredDate_${type}`).value  = cert[expField]   || "-";
+    })
+    .catch(err => console.error(err));
+}
 
 // ==================== SAVE BUTTON ====================
 document.getElementById("submit-btn").addEventListener("click", async (e) => {
@@ -686,37 +885,47 @@ document.getElementById("submit-btn").addEventListener("click", async (e) => {
   const msaResult = document.getElementById("msa-result").value;
 
   // build payload
-  const certificationData = {
-    nik,
-    soldering_written: parseInt(solderingInputs[0].value),
-    soldering_practical: parseInt(solderingInputs[1].value),
-    soldering_result: solderingInputs[2].value,
-    screwing_technique: parseInt(screwingInputs[0].value),
-    screwing_work: parseInt(screwingInputs[1].value),
-    screwing_result: screwingInputs[2].value,
-    ds_tiu: parseInt(screeningInputs[0].value),
-    ds_accu: parseInt(screeningInputs[1].value),
-    ds_heco: parseInt(screeningInputs[2].value),
-    ds_mcc: parseInt(screeningInputs[3].value),
-    ds_result: screeningResult,
-    process: lineProcess,
-    ls_target: parseFloat(lineTarget),
-    ls_actual: parseFloat(lineActual),
-    ls_achievement: parseFloat(lineAchievement),
-    ls_result: lineResult,
-    msaa_accuracy: parseInt(msaScores[0].value),
-    msaa_missrate: parseInt(msaScores[1].value),
-    msaa_falsealarm: parseInt(msaScores[2].value),
-    msaa_confidence: parseInt(msaScores[3].value),
-    msaa_result: msaResult,
-    document_number: docNos[0].value,
-    file_soldering: "",
-    file_screwing: "",
-    file_msa: "",
-    status: document.querySelectorAll(".upload-status span").length && Array.from(document.querySelectorAll(".upload-status span")).every(s => s.textContent.trim().toLowerCase().includes("pass")) ? "Pass" : "Not Yet",
-    training_date: trainingDates[0].value,
-    expired_date: expiredDates[0].value
-  };
+const certificationData = {
+  nik: document.getElementById("nik").value,
+  soldering_written: parseInt(solderingInputs[0].value),
+  soldering_practical: parseInt(solderingInputs[1].value),
+  soldering_result: solderingInputs[2].value,
+  screwing_technique: parseInt(screwingInputs[0].value),
+  screwing_work: parseInt(screwingInputs[1].value),
+  screwing_result: screwingInputs[2].value,
+  ds_tiu: parseInt(screeningInputs[0].value),
+  ds_accu: parseInt(screeningInputs[1].value),
+  ds_heco: parseInt(screeningInputs[2].value),
+  ds_mcc: parseInt(screeningInputs[3].value),
+  ds_result: screeningResult,
+  process: lineProcess,
+  ls_target: parseFloat(lineTarget),
+  ls_actual: parseFloat(lineActual),
+  ls_achievement: parseFloat(lineAchievement),
+  ls_result: lineResult,
+  msaa_accuracy: parseInt(msaScores[0].value),
+  msaa_missrate: parseInt(msaScores[1].value),
+  msaa_falsealarm: parseInt(msaScores[2].value),
+  msaa_confidence: parseInt(msaScores[3].value),
+  msaa_result: msaResult,
+  soldering_docno: docNos[0].value,
+  soldering_traindate: formatDateToMMDDYYYY(trainingDates[0].value),
+  soldering_expdate: formatDateToMMDDYYYY(expiredDates[0].value),
+  screwing_docno: docNos[1].value,
+  screwing_traindate: formatDateToMMDDYYYY(trainingDates[1].value),
+  screwing_expdate: formatDateToMMDDYYYY(expiredDates[1].value),
+  msa_docno: docNos[2].value,
+  msa_traindate: formatDateToMMDDYYYY(trainingDates[2].value),
+  msa_expdate: formatDateToMMDDYYYY(expiredDates[2].value),
+  file_soldering: "",
+  file_screwing: "",
+  file_msa: "",
+  status: document.querySelectorAll(".upload-status span").length &&
+          Array.from(document.querySelectorAll(".upload-status span"))
+            .every(s => s.textContent.trim().toLowerCase().includes("pass"))
+          ? "Pass" : "Not Yet"
+};
+
 
   try {
     const res = await fetch('/api/certification', {
@@ -735,13 +944,17 @@ document.getElementById("submit-btn").addEventListener("click", async (e) => {
     const toastElement = document.getElementById("saveToast");
     const toast = new bootstrap.Toast(toastElement);
     toast.show();
-
+    localStorage.setItem("showToast", "true");
     setTimeout(() => location.reload(), 1000);
 
   } catch (err) {
     console.error("Error saving certification record:", err);
     alert("Error saving data: " + err.message);
   }
+
+  
+  
+
 });
 
 

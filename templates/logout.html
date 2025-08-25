@@ -86,12 +86,12 @@
       timerElement.textContent = count;
       if (count <= 0) {
         clearInterval(countdown);
-        window.location.href = "login.html";
+        window.location.href = "/login";
       }
     }, 1000);
 
     function goToLogin() {
-      window.location.href = "login.html";
+      window.location.href = "/login";
     }
 
     // Clear login state just in case

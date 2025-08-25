@@ -30,29 +30,24 @@
 
   <!-- SIDEBAR MENU -->
   <div class="offcanvas offcanvas-start" tabindex="-1" id="mainMenu">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Menu</h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-      <nav class="nav flex-column">
-        <a class="nav-link" href="/home">Home</a> 
-        <hr>
-        <strong class="text-dark">Data Operator</strong>
-        <a class="nav-link ms-3" href="/profile">Data by HR</a>
-        <a class="nav-link ms-3" href="/IAB">Data by IAB</a> 
-        <hr>
-        <strong class="text-dark">Evaluation Report</strong>
-        <a class="nav-link ms-3" href="/data">View Data</a>
-        <!-- <a class="nav-link ms-3" href="approval.html">Document Approval</a>
-        <a class="nav-link ms-3" href="status.html">Document Status</a>
-        <hr>
-        <a class="nav-link" href="matrix.html">Flexibility Matrix</a>
-        <hr> -->
-        <button class="btn btn-outline-danger btn-logout mt-2" onclick="window.location.href='/logout'">Logout</button>
-      </nav>
-    </div>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Menu</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
   </div>
+  <div class="offcanvas-body">
+    <nav class="nav flex-column">
+      <a class="nav-link" href="/home">Home</a> 
+      <hr>
+      <strong class="text-dark">Data Operator</strong>
+      <a class="nav-link ms-3" href="/profile">Data by HR</a>
+      <a class="nav-link ms-3" href="/IAB">Data by IAB</a> 
+      <hr>
+      <strong class="text-dark">Evaluation Report</strong>
+      <a class="nav-link ms-3" href="/data">View Data</a>
+      <button class="btn btn-outline-danger btn-logout mt-2" onclick="window.location.href='/logout'">Logout</button>
+    </nav>
+  </div>
+</div>
 
   <!-- MAIN CONTENT -->
   <div class="container">
@@ -366,23 +361,34 @@
 </div>
   </div>
 
+  <!-- Toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="saveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-        Certification record saved successfully!
+    <div id="saveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">Certification record saved successfully!</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-</div>
 
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
-  <script src="static/profile.js"></script> 
+  <script>AOS.init();
+
+    document.addEventListener("DOMContentLoaded", () => {
+    const currentPath = window.location.pathname; 
+    const menuLinks = document.querySelectorAll(".offcanvas-body .nav-link");
+
+    menuLinks.forEach(link => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      }
+    });
+  });
+  </script>
+  <script src="static/hrd.js"></script> 
  </body>
 
 <footer class="text-center mt-5">

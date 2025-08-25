@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import Column, Text
 from sqlalchemy.dialects.mssql import CHAR
 from sqlalchemy.orm import relationship
+from typing import Optional
 
 class TMOperator(Base):
     __tablename__ = "TM_Operator"
@@ -48,15 +49,25 @@ class CertificationRecord(Base):
     msaa_confidence = Column("MSAA_Confidence", Integer, nullable=False)
     msaa_result = Column("MSAA_Result", String(10), nullable=False)
 
-    document_number = Column("DocumentNumber", String(100), nullable=False)
+    soldering_docno = Column("SolderingDocNo", String(50), nullable=False)
+    soldering_traindate = Column("SolderingTrainDate", Date, nullable=False)
+    soldering_expdate = Column("SolderingExpDate", Date, nullable=False)
+
+    screwing_docno = Column("ScrewingDocNo", String(50), nullable=False)
+    screwing_traindate = Column("ScrewingTrainDate", Date, nullable=False)
+    screwing_expdate = Column("ScrewingExpiredDate", Date, nullable=False)
+
+    msa_docno = Column("MSADocNo", String(50), nullable=False)
+    msa_traindate = Column("MSATrainDate", Date, nullable=False)
+    msa_expdate = Column("MSAExpDate", Date, nullable=False)
+    
     file_soldering = Column("FileSoldering", Text, nullable=False)
     file_screwing = Column("FileScrewing", Text, nullable=False)
     file_msa = Column("FileMSA", Text, nullable=False)
+    
     status = Column("Status", String(20), nullable=False)
-    training_date = Column("TrainingDate", Date, nullable=False)
-    expired_date = Column("ExpiredDate", Date, nullable=False)
 
-    CreatedAt = Column("CreatedAt", DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column("CreatedAt", DateTime, nullable=False, default=datetime.utcnow)
 
 class EvaluationDocument(Base):
     __tablename__ = "T_EvaluationDocument"
