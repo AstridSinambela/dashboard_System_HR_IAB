@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assigned Evaluation</title>
+    <link rel="stylesheet" href="../static/eval_assigned.css?v=10" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <h1>Assigned Evaluation For You</h1>
+    </header>
+
+    <!-- Search Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="icon">🔍</span>
+        <input type="text" placeholder="Search by ID COS" />
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>COS NO</th>
+            <th>Issued by</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in assigned %}
+          <tr>
+            <td>{{ row.id_cos }}</td>
+            <td>{{ row.issuer_name }}</td>
+            <td>{{ row.created_at.strftime('%d-%b-%y') }}</td>
+            <td>{{ row.updated_at.strftime('%d-%b-%y') }}</td>
+            <td>
+              {% if row.task_status == 1 %}
+              <span class="status gray">New (Waiting Document)</span>
+              {% elif row.task_status == 2 %}
+              <span class="status yellow">Need to Check</span>
+              {% elif row.task_status == 3 %}
+              <span class="status blue">Request Revision</span>
+              {% elif row.task_status == 4 %}
+              <span class="status red">Need to Revision</span>
+              {% elif row.task_status == 5 %}
+              <span class="status green">Approve (Done)</span>
+              {% else %}
+              <span class="status gray">Unknown</span>
+              {% endif %}
+            </td>
+            <td>
+              <a
+                href="/check_evaluation?id_cos={{ row.id_cos }}"
+                class="btn-action"
+              >
+                ▶
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <button class="btn-back">Back</button>
+    </footer>
+  </body>
+</html>

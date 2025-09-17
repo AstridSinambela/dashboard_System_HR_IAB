@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Show PDF</title>
+    <script>
+        function showPDF() {
+            const nik = document.getElementById("nikInput").value;
+            if (!nik) {
+                alert("Masukkan NIK dulu!");
+                return;
+            }
+            // buka tab baru langsung preview PDF
+            window.open("/get_pdf/" + nik, "_blank");
+        }
+    </script>
+</head>
+<body>
+    <h2>Testing Show PDF</h2>
+    <label for="nikInput">Type NIK:</label>
+    <input type="text" id="nikInput" maxlength="8">
+    <button onclick="showPDF()">Show</button>
+</body>
+</html>

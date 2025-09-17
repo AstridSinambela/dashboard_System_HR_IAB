@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/static/data_user.css?v=1">
+</head>
+<body class="content">
+  <h2>All Users</h2>
+
+  <!-- FORM USER -->
+  <form action="/create_user" method="post" class="user-form">
+    <input type="text" name="name" placeholder="Username" required>
+    <input type="text" name="firstname" placeholder="First Name">
+    <input type="text" name="lastname" placeholder="Last Name">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <select name="gender">
+      <option value="0">Male</option>
+      <option value="1">Female</option>
+    </select>
+    <select name="role_id">
+      <option value="1">Admin</option>
+      <option value="2">HR</option>
+      <option value="3">IAB Staff</option>
+      <option value="4">Line Leader</option>
+      <option value="5">Supervisor Production</option>
+      <option value="6">Production Manager</option>
+      <option value="7">Supervisor Quality Assurance</option>
+      <option value="8">Quality Assurance Manager</option>
+    </select>
+    <button type="submit">Add User</button>
+  </form>
+
+  <!-- GRID TABEL -->
+  <div class="tables-grid">
+    {% set roles = {
+      1: "Admin",
+      2: "HR",
+      3: "IAB Staff",
+      4: "Line Leader",
+      5: "Supervisor Production",
+      6: "Production Manager",
+      7: "Supervisor Quality Assurance",
+      8: "Quality Assurance Manager"
+    } %}
+
+    {% for rid, role_name in roles.items() %}
+    <div class="table-container">
+      <h3>{{ role_name }}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Email</th><th>Fullname</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users if user.role_id == rid %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.fullname }}</td>
+            <td class="action-buttons">
+              <form action="/delete_user/{{ user.id }}" method="post">
+                <button type="submit" class="delete-btn">Delete</button>
+              </form>
+              <a href="/edit_user/{{ user.id }}" target="content">
+                <button type="button" class="edit-btn">Edit</button>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

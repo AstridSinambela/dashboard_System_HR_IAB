@@ -1,0 +1,183 @@
+/* Reset dasar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Warna background utama */
+body {
+  background-color: #d5ddf2;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+/* Header */
+.header {
+  background: #005073;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  height: 60px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  align-items: center;
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px 80px;
+  gap: 15px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  position: relative;
+  width: 300px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  margin-left: 10px;
+  color: #333;
+  width: 100%;
+}
+
+.btn-new {
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 10px 20px;
+  font-size: 15px;
+  border: none;
+  color: #004b78;
+  background: linear-gradient(135deg, #bceffd, #fdfdfd);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-new:hover {
+  background: linear-gradient(135deg, #b6cff3, #308cc2fd);
+  color: #ffffff;
+}
+
+/* Table Section */
+.table-section {
+  padding: 0 14px;   /* tabel full width */
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+  margin: 0 auto;
+}
+
+/* Header tabel */
+thead th {
+  background: linear-gradient(135deg, #007cba, #005073);
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+}
+
+/* Body tabel */
+tbody td {
+  background-color: #f9fbff;
+  border: none;
+  padding: 8px 10px;
+  vertical-align: middle;
+  font-size: 13.5px;
+}
+
+/* Highlight kolom pertama */
+tbody td:first-child {
+  font-weight: 600;
+  background-color: #e9f5ff;
+  color: #005073;
+}
+
+/* Hover efek row */
+tbody tr:hover td {
+  background-color: #e2f1fb;
+}
+
+/* Link/ikon detail */
+td a {
+  text-decoration: none;
+  font-size: 15px;
+  color: #005073;
+}
+
+td a:hover {
+  color: #007cba;
+}
+
+
+/* Floating suggestion card */
+.autocomplete-items {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  max-height: 250px;
+  overflow-y: auto;
+  display: none; /* default hidden */
+  z-index: 2000;
+}
+
+.autocomplete-items.active {
+  display: block; /* muncul hanya kalau ada hasil */
+}
+
+.autocomplete-items div {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.autocomplete-items div:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-items div:hover {
+  background-color: #e6f4ff;
+}
+
+.autocomplete-highlight {
+  font-weight: bold;
+  color: #005073;
+}

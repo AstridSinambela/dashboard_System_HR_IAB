@@ -1,0 +1,104 @@
+/* Reset */
+body,
+h1,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #dbe4f0;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-bar {
+  background-color: #0b567d;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center; /* tengah */
+  align-items: center;
+  position: relative; /* biar logo bisa absolute */
+  height: 50px;
+}
+
+.top-bar .title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.top-bar .logo {
+  height: 30px;
+  position: absolute;
+  right: 20px;
+}
+
+/* Content layout */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.content .left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-image {
+  max-width: 90%;
+  max-height: 350px; /* biar ga terlalu tinggi */
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  object-fit: contain;
+}
+
+.content .right {
+  flex: 1;
+  text-align: left;
+  padding: 20px;
+}
+
+.welcome {
+  font-size: 28px;
+  color: #0077c8;
+  font-weight: bold;
+  margin-bottom: 130px; /* tambah jarak dengan role */
+}
+
+.role {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  margin-top: -100px;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #005a9c;
+}
+
+.tagline {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Footer */
+.footer {
+  background: transparent;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+}

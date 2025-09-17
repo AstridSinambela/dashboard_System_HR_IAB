@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+jinja2
+sqlalchemy
+passlib
+python-multipart
+itsdangerous
+python-dotenv
+weasyprint 
+PyPDF2 
+reportlab
+Pillow
+pip install websockets
+

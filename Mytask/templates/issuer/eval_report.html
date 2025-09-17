@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluation Report</title>
+    <link rel="stylesheet" href="/static/eval_reports.css?v=6" />
+    <link rel="stylesheet" href="/static/global.css" />
+    <script src="/static/global.js" defer></script>
+  </head>
+  <body>
+    <!-- Global Loading Overlay -->
+    <div id="loading-overlay">
+      <div class="dots-loader"><span></span><span></span><span></span></div>
+    </div>
+    <!-- Navbar -->
+    <header class="navbar">
+      <h1>Evaluation Report</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- COS Select (span 2 kolom) -->
+      <section class="doc-section cos-section">
+        <input
+          list="cos-groups"
+          id="cos-select"
+          placeholder="COS No"
+          value="{{ selected_cos if selected_cos else '' }}"
+        />
+        <datalist id="cos-groups">
+          {% for id_cos in id_cos_list %}
+          <option value="{{ id_cos }}"></option>
+          {% endfor %}
+        </datalist>
+        <button type="button" onclick="goToSelected()">OK</button>
+      </section>
+
+      <!-- Form (gunakan display: contents biar ikut grid) -->
+      <form
+        action="/issuer/eval_report"
+        method="post"
+        enctype="multipart/form-data"
+        onsubmit="showLoading()"
+      >
+        <input
+          type="hidden"
+          id="id_cos"
+          name="id_cos"
+          value="{{ selected_cos if selected_cos else '' }}"
+        />
+
+        <!-- COS -->
+        <section class="doc-section">
+          <h2>Change Order Sheet</h2>
+          {% set cos_doc = documents|selectattr("doc_type", "equalto",
+          "COS")|first %} {% if cos_doc %}
+          <p>
+            <a
+              href="/issuer/file/{{ selected_cos }}/{{ cos_doc.id }}"
+              target="_blank"
+              >{{ cos_doc.file_name }}</a
+            >
+          </p>
+          {% endif %}
+          <div class="file-upload">
+            <label for="cos-file" class="file-label">Choose File</label>
+            <input
+              type="file"
+              id="cos-file"
+              name="change_order_sheet"
+              accept=".pdf"
+              onchange="showFileName(this)"
+            />
+            <span class="file-name" id="cos-file-name">No file chosen</span>
+          </div>
+        </section>
+
+        <!-- PFM -->
+        <section class="doc-section">
+          <h2>Process Flexibility Matrix</h2>
+          {% set pfm_doc = documents|selectattr("doc_type", "equalto",
+          "PFM")|first %} {% if pfm_doc %}
+          <p>
+            <a
+              href="/issuer/file/{{ selected_cos }}/{{ pfm_doc.id }}"
+              target="_blank"
+              >{{ pfm_doc.file_name }}</a
+            >
+          </p>
+          {% endif %}
+          <div class="file-upload">
+            <label for="pfm-file" class="file-label">Choose File</label>
+            <input
+              type="file"
+              id="pfm-file"
+              name="process_flex_matrix"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onchange="showFileName(this)"
+            />
+            <span class="file-name" id="pfm-file-name">No file chosen</span>
+          </div>
+        </section>
+
+        <!-- WGS -->
+        <section class="doc-section">
+          <h2>WGS File</h2>
+          {% set wgs_doc = documents|selectattr("doc_type", "equalto",
+          "WGS")|first %} {% if wgs_doc %}
+          <p>
+            <a
+              href="/issuer/file/{{ selected_cos }}/{{ wgs_doc.id }}"
+              target="_blank"
+              >{{ wgs_doc.file_name }}</a
+            >
+          </p>
+          {% endif %}
+          <div class="file-upload">
+            <label for="wgs-file" class="file-label">Choose File</label>
+            <input
+              type="file"
+              id="wgs-file"
+              name="wgs_file"
+              accept=".pdf,jpg,.jpeg,.png"
+              onchange="showFileName(this)"
+            />
+            <span class="file-name" id="wgs-file-name">No file chosen</span>
+          </div>
+        </section>
+
+        <!-- MO -->
+        <section class="doc-section">
+          <h2>MO File</h2>
+          {% set mo_doc = documents|selectattr("doc_type", "equalto",
+          "MO")|first %} {% if mo_doc %}
+          <p>
+            <a
+              href="/issuer/file/{{ selected_cos }}/{{ mo_doc.id }}"
+              target="_blank"
+              >{{ mo_doc.file_name }}</a
+            >
+          </p>
+          {% endif %}
+          <div class="file-upload">
+            <label for="mo-file" class="file-label">Choose File</label>
+            <input
+              type="file"
+              id="mo-file"
+              name="mo_file"
+              accept=".pdf,jpg,.jpeg,.png"
+              onchange="showFileName(this)"
+            />
+            <span class="file-name" id="mo-file-name">No file chosen</span>
+          </div>
+        </section>
+
+        <!-- Others -->
+        <section class="doc-section others-section">
+          <h2>Others File</h2>
+          {% for other_doc in documents if other_doc.doc_type == "OTHERS" %}
+          <p>
+            <a
+              href="/issuer/file/{{ selected_cos }}/{{ other_doc.id }}"
+              target="_blank"
+              >{{ other_doc.file_name }}</a
+            >
+          </p>
+          {% endfor %}
+
+          <div id="others-container" class="file-upload">
+            <label for="others-file-1" class="file-label">Choose File</label>
+            <input
+              type="file"
+              id="others-file-1"
+              name="others_file"
+              accept=".pdf,jpg,.jpeg,.png"
+              onchange="showFileName(this)"
+            />
+            <span class="file-name" id="others-file-1-name"
+              >No file chosen</span
+            >
+          </div>
+          <button type="button" onclick="addOthersFile()">＋ Add More</button>
+        </section>
+
+        <!-- Footer Actions -->
+        <div class="footer-actions">
+          <button type="submit" class="btn-submit">Save</button>
+          <button type="button" class="btn-cancel" onclick="history.back()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      function goToSelected() {
+        const selected = document.getElementById("cos-select").value;
+        if (selected) {
+          window.location.href =
+            "/issuer/eval_report/" + encodeURIComponent(selected);
+        }
+      }
+
+      function showFileName(input) {
+        const idCos = document.getElementById("id_cos").value;
+        if (!idCos) {
+          alert("⚠️ Pilih COS terlebih dahulu dan klik OK sebelum upload file!");
+          input.value = ""; // reset input file
+          return;
+        }
+
+        const fileNameSpan = document.getElementById(input.id + "-name");
+        if (input.files.length > 0) {
+          fileNameSpan.textContent = input.files[0].name;
+        } else {
+          fileNameSpan.textContent = "No file chosen";
+        }
+      }
+
+      // Cek sebelum submit form
+      document.querySelector("form").addEventListener("submit", function (e) {
+        const idCos = document.getElementById("id_cos").value;
+        if (!idCos) {
+          e.preventDefault();
+          alert("⚠️ Harus pilih COS dan klik OK dulu sebelum menyimpan!");
+        }
+      });
+
+      let otherCount = 1;
+      function addOthersFile() {
+        otherCount++;
+        const container =
+          document.getElementById("others-container").parentNode;
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("file-upload");
+        newDiv.innerHTML = `
+          <label for="others-file-${otherCount}" class="file-label">Choose File</label>
+          <input type="file" id="others-file-${otherCount}" name="others_file" accept=".pdf,.doc,.docx" onchange="showFileName(this)">
+          <span class="file-name" id="others-file-${otherCount}-name">No file chosen</span>
+        `;
+        container.appendChild(newDiv);
+      }
+    </script>
+  </body>
+</html>

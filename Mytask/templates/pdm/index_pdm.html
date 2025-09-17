@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Production Manager</title>
+    <link rel="stylesheet" href="/static/style.css?v=1" />
+    <style>
+      .container {
+        display: flex;
+        height: 100vh;
+      }
+      .navbar-frame {
+        width: 250px; /* default width */
+        border: none;
+        transition: width 0.3s ease;
+      }
+      .content-frame {
+        flex: 1;
+        border: none;
+      }
+      .hide {
+        width: 0;
+      }
+
+      /* Tombol */
+      .toggle-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+        padding: 6px 10px;
+        cursor: pointer;
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: width 0.3s ease, height 0s ease;
+        overflow: hidden; /* biar konten tidak keluar saat diperkecil */
+        height: 30px;
+      }
+
+      .toggle-wide {
+        width: 200px;
+      }
+      .toggle-small {
+        width: 40px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Style hamburger */
+      .hamburger {
+        display: inline-block;
+        width: 20px;
+        height: 14px;
+        position: relative;
+        margin-top: -3px;
+        transition: 0.3s;
+      }
+      .hamburger span {
+        background: #fff;
+        display: block;
+        height: 3px;
+        margin: 2px 0;
+        border-radius: 2px;
+        transition: 0.3s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Tombol awal: Hide -->
+    <button id="toggleBtn" class="toggle-btn toggle-wide">&lt; Hide</button>
+
+    <div class="container">
+      <iframe src="/pdm/navbar" class="navbar-frame" id="navbarFrame"></iframe>
+      <iframe src="/pdm/content" name="content_pdm" class="content-frame"></iframe>
+    </div>
+
+    <script>
+      const toggleBtn = document.getElementById("toggleBtn");
+      const navbarFrame = document.getElementById("navbarFrame");
+      let isHidden = false;
+
+      toggleBtn.addEventListener("click", () => {
+        if (isHidden) {
+          navbarFrame.classList.remove("hide");
+          toggleBtn.classList.remove("toggle-small");
+          toggleBtn.classList.add("toggle-wide");
+          toggleBtn.innerHTML = "&lt; Hide";
+        } else {
+          navbarFrame.classList.add("hide");
+          toggleBtn.classList.remove("toggle-wide");
+          toggleBtn.classList.add("toggle-small");
+          toggleBtn.innerHTML = `
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>`;
+        }
+        isHidden = !isHidden;
+      });
+    </script>
+  </body>
+</html>

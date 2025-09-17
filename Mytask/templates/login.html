@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Dashboard</title>
+
+  <!-- Bootstrap 5 (offline) -->
+  <link rel="stylesheet" href="{{ url_for('static', path='styling_on/bootstrap.min.css') }}">
+
+  <!-- Google Fonts Poppins (offline) -->
+  <link rel="stylesheet" href="{{ url_for('static', path='styling_on/poppins.css') }}">
+
+  <!-- Lottie Web (offline) -->
+  <script src="{{ url_for('static', path='styling_on/lottie.min.js') }}"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      font-family:'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6fb1fc, #ffffff);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .login-container {
+      background-color: white;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 850px;
+      overflow: hidden;
+      height: 420px; 
+      z-index: 10;
+    }
+
+    .form-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 50%;
+      padding: 40px 30px;
+      background-color: #fff;
+    }
+
+    .form-side h3 {
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, #1e5f9b, #90c2f0);
+    }
+
+    .form-side p {
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding-left: 38px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      background-size: 18px;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #0e72ec;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(14, 114, 236, 0.2);
+      color: #111;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      font-weight: bold;          
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0e72ec, #5daeff);
+      border: none;
+      color: #fff;
+      transition: 0.3s ease;
+    }
+
+    .btn-login:hover {
+      background: linear-gradient(135deg,#48a7ff,#00245b);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(14, 114, 236, 0.3);
+    }
+
+    .image-side {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px;
+    }
+
+    .image-side img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .error {
+      color: red;
+      font-size: small;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    /* Lottie fixed at bottom right */
+    #lottie-login {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      width: 160px;
+      height: 160px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .form-side,
+      .image-side {
+        width: 100%;
+      }
+      #lottie-login {
+        width: 100px;
+        height: 100px;
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <!-- Form side -->
+    <div class="form-side">
+      <h3>LOGIN</h3>
+      <p>Welcome back, please login to continue</p>
+
+      {% if msg %}
+        <p class="error">{{ msg }}</p>
+      {% endif %}
+
+      <form method="post" action="/login">
+        <input type="text" name="identifier" class="form-control mb-3" placeholder="Email or Username" required>
+        <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+        <button type="submit" class="btn btn-login">LOGIN</button>
+      </form>
+    </div>
+
+    <!-- Image side -->
+    <div class="image-side">
+      <img src="{{ url_for('static', path='assets/omron-login.png') }}" alt="Login Illustration">
+    </div>
+  </div>
+
+  <!-- Lottie Animation -->
+  <div id="lottie-login"></div>
+
+  <script>
+    // Load Lottie animation (offline JSON)
+    lottie.loadAnimation({
+      container: document.getElementById('lottie-login'),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path:  "{{ url_for('static', path='styling_on/lf20_qp1q7mct.json') }}" 
+    });
+  </script>
+
+  <!-- Bootstrap Bundle JS (offline) -->
+  <script src="{{ url_for('static', path='styling_on/bootstrap.bundle.min.js') }}"></script>
+
+</body>
+</html>

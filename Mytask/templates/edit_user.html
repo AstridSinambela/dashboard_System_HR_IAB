@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="content">
+  <h2>Edit User</h2>
+
+  <form action="/edit_user/{{ user.id }}" method="post">
+    <input type="text" name="name" value="{{ user.name }}" required>
+    <input type="text" name="firstname" value="{{ user.firstname }}">
+    <input type="text" name="lastname" value="{{ user.lastname }}">
+    <input type="email" name="email" value="{{ user.email }}" required>
+    <input type="password" name="password" placeholder="New Password">
+
+    <select name="gender">
+      <option value="0" {% if user.gender == 0 %}selected{% endif %}>Male</option>
+      <option value="1" {% if user.gender == 1 %}selected{% endif %}>Female</option>
+    </select>
+
+    <select name="role_id">
+      <option value="1" {% if user.role_id == 1 %}selected{% endif %}>Admin</option>
+      <option value="2" {% if user.role_id == 2 %}selected{% endif %}>HR</option>
+      <option value="3" {% if user.role_id == 3 %}selected{% endif %}>IAB Staff</option>
+      <option value="4" {% if user.role_id == 4 %}selected{% endif %}>Line Leader</option>
+      <option value="5" {% if user.role_id == 5 %}selected{% endif %}>Supervisor Production</option>
+      <option value="6" {% if user.role_id == 6 %}selected{% endif %}>Production Manager</option>
+      <option value="6" {% if user.role_id == 7 %}selected{% endif %}>Supervisor Quality Assurance</option>
+      <option value="6" {% if user.role_id == 8 %}selected{% endif %}>Quality Assurance Manager</option>
+    </select>
+    <button type="submit">Update User</button>
+    <button type="button" onclick="window.history.back()">Back</button>
+  </form>
+</body>
+</html>

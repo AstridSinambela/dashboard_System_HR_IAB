@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New Docs</title>
+  <link rel="stylesheet" href="../../static/add_cos.css?v=2?">
+</head>
+<body>
+  <header class="header">
+    <h1>Add New Docs</h1>
+  </header>
+
+  <section class="form-section">
+    <form action="/issuer/add_cos" method="post" class="cos-form">
+      
+      <!-- COS No -->
+      <div class="form-line">
+        <label for="id_cos"><strong>Cos No:</strong></label>
+        <input type="text" id="id_cos" name="id_cos"
+              value="{{ id_cos if id_cos else '' }}"
+              placeholder="type manually by .."
+              {% if id_cos %}readonly{% endif %} required>
+      </div>
+
+      <!-- Status -->
+      <div class="form-line">
+        <label><strong>Status :</strong></label>
+        <span class="status-badge">New</span>
+      </div>
+
+      <!-- Select Operators -->
+      <div class="form-line">
+        <label><strong>Select Operators</strong></label>
+      </div>
+
+      <!-- Search + Buttons -->
+      <div class="top-bar">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="searchOperator" type="text" placeholder="... find OPT by NIK" autocomplete="off">
+        </div>
+        <div class="action-buttons">
+          <button type="submit" class="btn save-btn">💾 Save</button>
+          <button type="button" class="btn cancel-btn" onclick="window.history.back()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Autocomplete -->
+      <div id="autocomplete-operator" class="autocomplete-items"></div>
+
+      <!-- Operator List -->
+      <div class="operator-list">
+        <table id="operatorTable" border="1" cellpadding="8" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>NIK</th>
+              <th>Name</th>
+              <th>PDF Path</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for op in operators %}
+            <tr>
+              <td><input type="checkbox" name="operator_ids[]" value="{{ op.id }}"></td>
+              <td>{{ op.nik }}</td>
+              <td>{{ op.name }}</td>
+              <td>
+                <a href="/issuer/operator_file/{{ op.id }}" target="_blank" class="link">
+                  {{ op.pdf_path }}
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </section>
+
+<script>
+  const OPERATOR_LIST = {{ operators | tojson | safe }};
+</script>
+  <script src="../../static/add_cos.js"></script>
+</body>
+</html>

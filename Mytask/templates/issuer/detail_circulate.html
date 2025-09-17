@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Evaluation Document</title>
+  <link rel="stylesheet" href="/static/detail_circulate.css?v=2">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>Detail Evaluation Document</h1>
+  </header>
+
+  <!-- Wrapper isi -->
+  <div class="content-wrapper">
+    <!-- Info Card + Actions sejajar -->
+    <section class="info-actions">
+      <div class="info-card">
+        <p><strong>Cos No</strong>: {{ cos.id_cos }}</p>
+        <p><strong>Created Time</strong>: {{ cos.created_time.strftime("%d %B %Y") }}</p>
+        <p><strong>Issued</strong>: {{ cos.issuer }}</p>
+        <p><strong>Current State</strong>: {{ status_text }}</p>
+        <p><strong>Before State</strong>: {{ cos.before_state }}</p>
+      </div>
+
+      <div class="actions">
+        <a href="/issuer/final_pdf/{{ cos.id_cos }}" target="_blank" class="btn">See Document</a>
+        <a href="/issuer/final_pdf/{{ cos.id_cos }}" download class="btn">Download Document</a>
+      </div>
+    </section>
+
+    <!-- Circulation Track -->
+    <section class="circulation">
+      <h2>CIRCULATE TRACK</h2>
+      <div class="track">
+        {% for task in cos.tasks %}
+        <div class="step status-{{ task.status }}">
+          <h3>{{ task.task_type }}</h3>
+          <span class="status">{{ task.tasked_name }}</span>
+          <p class="date">{{ task.updated_at.strftime("%A %d/%m/%Y") if task.updated_at else "-" }}</p>
+          <p class="note">
+            {% if task.status == 1 %} Waiting Document
+            {% elif task.status == 2 %} Need to Check
+            {% elif task.status == 3 %} Request Revision
+            {% elif task.status == 4 %} Need to Request
+            {% elif task.status == 5 %} Approve (Done)
+            {% else %} Unknown {% endif %}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button class="btn back-btn" onclick="history.back()">Back</button>
+    </footer>
+  </div>
+</body>
+</html>

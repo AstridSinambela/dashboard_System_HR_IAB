@@ -1,0 +1,74 @@
+22 -> Last di .env configuration and login user auth, and direct page according user role_id
+Tinggal merge dan design 1 circile after click save
+STATUS DI Document For group
+ 1= New
+ 2=waiting Upload Evaluation
+ 3=Completed - Ready send to checker
+ 4= Complete - Waiting Approve Circulate
+ 5= Done
+
+STATUS DI Evaldocgroup
+    # 1 = New
+    # 2 = waiting checker
+    # 3 = need revision from checker
+    # 4 = waiting approval
+    # 5 = need revision from approver
+    # 6 = waiting QA check
+    # 7 = need revision from QA check
+    # 8 = waiting QA approval
+    # 9 = need revision from QA approval
+    # 10 = completed
+
+STATUS di evalTask Tbale
+            {% if row.task_status == 1 %}
+              <span class="status gray">New (Waiting Document)</span>
+            {% elif row.task_status == 2 %}
+              <span class="status yellow">Need to Check</span>
+            {% elif row.task_status == 3 %}
+              <span class="status orange">Request Revision</span>
+            {% elif row.task_status == 4 %}
+              <span class="status red">Need to Revision</span>
+            {% elif row.task_status == 5 %}
+              <span class="status green">Approve (Done)</span>
+            {% else %}
+              <span class="status gray">Unknown</span>
+            {% endif %}
+
+Status di EvalRevision
+    # 1 = New revision
+    # 2 = sudah direvisi (nunggu check)
+    # 3 = Done (accept)
+
+, jadi table nya automatis berkurang juga sesui inputan nya type by type
+dan logic nya adalah, id cos yang di cari hanya lah yang di pdffinal tapi nanti ketika diklik di arahkan ke id table itu, lalu dan tidak ada idcos yang di evaluationdocumentgroup.
+yang artinya id yang di munculkan yang hanya di pdffinal, dan id itu tidak ada di evaluationdocumentgroup
+
+    <select name="role_id">
+      <option value="1">Admin</option>
+      <option value="2">HR</option>
+      <option value="3">IAB Staff</option>
+      <option value="4">Line Leader</option>
+      <option value="5">Supervisor Production</option>
+      <option value="6">Production Manager</option>
+      <option value="7">Supervisor Quality Assurance</option>
+      <option value="8">Quality Assurance Manager</option>
+    </select>
+
+    @app.get("/issuer/add_circulate", response_class=HTMLResponse)
+async def add_circulate(request: Request, db: Session = Depends(get_db), user=Depends(current_user)):
+    ready_docs = crud.get_ready_document_groups_for_circulate(db)
+
+    users_checked = crud.get_users_by_roles(db, [5, 6])
+    users_approved = crud.get_users_by_roles(db, [6])
+    users_qa_checked = crud.get_users_by_roles(db, [7, 8])
+    users_qa_approved = crud.get_users_by_roles(db, [8])
+
+    return templates.TemplateResponse("issuer/add_circulate.html", {
+        "request": request,
+        "docs": ready_docs,
+        "issuer": user,
+        "users_checked": users_checked,
+        "users_approved": users_approved,
+        "users_qa_checked": users_qa_checked,
+        "users_qa_approved": users_qa_approved
+    })

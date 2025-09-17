@@ -1,0 +1,191 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #d5ddf2;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+/* Navbar */
+.navbar {
+  background: #005073;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 1050;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.navbar h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Container pakai grid */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 25px;
+  justify-items: stretch;
+  margin-top: -10px;
+}
+
+/* Biar <form> tidak merusak grid */
+.container form {
+  display: contents;
+}
+
+/* Section */
+.doc-section {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+  border: 2px solid #ffffff;
+}
+
+.doc-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #005073;
+  margin-bottom: 12px;
+}
+
+/* COS Section span 2 kolom */
+.cos-section {
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Others tetap di kiri */
+.others-section {
+  grid-column: 1 / 2;
+}
+
+/* Footer Save/Cancel di kanan bawah */
+.footer-actions {
+  grid-column: 2;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  align-self: start;   /* <- biar ga ikut memanjang */
+}
+
+/* Input COS */
+#cos-select {
+  padding: 8px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+/* Bold placeholder */
+#cos-select::placeholder {
+  font-weight: bold;
+  color: #004a78;
+}
+
+#cos-select:focus {
+  border-color: #007cba;
+  box-shadow: 0 0 5px rgba(0,124,186,0.3);
+}
+
+/* Buttons */
+button {
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Fix ukuran Save & Cancel */
+.btn-submit,
+.btn-cancel {
+  width: 120px;       /* <- fix lebar */
+  height: 45px;       /* <- fix tinggi */
+  text-align: center;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #007cba, #005073);
+  color: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.btn-submit:hover {
+  background: linear-gradient(135deg, #308cc2fd, #004a78);
+}
+
+.btn-cancel {
+  background: #eee;
+  color: #444;
+}
+
+.btn-cancel:hover {
+  background: #ddd;
+}
+
+/* File Upload */
+input[type="file"] {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.file-label {
+  background: linear-gradient(135deg, #007cba, #005073);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transition: all 0.3s ease-in-out;
+}
+
+.file-label:hover {
+  background: linear-gradient(135deg, #308cc2fd, #004a78);
+}
+
+.file-name {
+  font-size: 14px;
+  color: #333;
+  font-style: italic;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

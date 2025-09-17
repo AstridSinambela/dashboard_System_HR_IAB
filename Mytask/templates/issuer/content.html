@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Issuer Dashboard</title>
+    <link rel="stylesheet" href="/static/content.css?v=7" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="top-bar">
+      <h1 class="title">Issuer Dashboard</h1>
+      <img
+        src="{{ request.url_for('static', path='assets/omron-logo.png') }}"
+        alt="Omron"
+        class="logo"
+      />
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+      <div class="left">
+        <img
+          src="{{ request.url_for('static', path='assets/hero_image.jpg') }}"
+          alt="Hero"
+          class="main-image"
+        />
+      </div>
+      <div class="right">
+        <h2 class="welcome">WELCOME!</h2>
+        <p class="role">You are an <span class="highlight">Issuer</span></p>
+        <p class="tagline">Do your Bestt!!</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© IAB 2025 – Omron Manufacturing of Indonesia</p>
+    </footer>
+  </body>
+</html>

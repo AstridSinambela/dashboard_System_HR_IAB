@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Assigned Evaluation</title>
+  <link rel="stylesheet" href="../static/check_evaluation.css?v=8" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1>Check Assigned Evaluation</h1>
+  </header>
+
+  <div class="container">
+    <!-- Info Card -->
+    <div class="info-card">
+      <p><strong>Cos No</strong> : {{ cos.id_cos }}</p>
+      <p><strong>Created Time</strong> : {{ cos.created_time.strftime("%d %B %Y") }}</p>
+      <p><strong>Issued</strong> : {{ cos.issuer }}</p>
+      <p><strong>Current State</strong> : {{ status_text }}</p>
+      <p><strong>Before State</strong> : {{ cos.before_state }}</p>
+      <div class="buttons">
+        <button class="btn">
+          <a href="/issuer/final_pdf/{{ cos.id_cos }}" target="_blank">See Document</a>
+        </button>
+        <button class="btn">
+          <a href="/issuer/final_pdf/{{ cos.id_cos }}" download>Download Document</a>
+        </button>
+      </div>
+    </div>
+
+    <!-- Revision Section -->
+    <section class="revision-section">
+      <h2>Request Revision</h2>
+
+      <!-- Header row -->
+      <div class="revision-header">
+        <div>Description</div>
+        <div>Supporting File</div>
+        <div>Task To</div>
+        <div>Status</div>
+      </div>
+
+      <!-- Existing Revisions -->
+      {% for rev in revisions %}
+      <div class="revision-row">
+        <div class="desc">{{ rev.description }}</div>
+        <div class="upload">
+          {% if rev.file_name %}
+            <a href="/revision_file/{{ rev.id }}" target="_blank">{{ rev.file_name }}</a>
+          {% else %}
+            <span>No File</span>
+          {% endif %}
+        </div>
+        <div class="task">{{ rev.give_to_name or "-" }}</div>
+        <div class="status">
+          {% if rev.status == 1 %}
+            <span class="badge badge-gray">New</span>
+          {% elif rev.status == 2 %}
+            <span class="badge badge-orange">Waiting Check</span>
+          {% else %}
+            <span class="badge badge-green">Done</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <!-- Add Revision -->
+      <form class="revision-form" action="/check_evaluation/add_revision" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id_cos" value="{{ cos.id_cos }}">
+
+        <!-- Textarea untuk description -->
+        <div class="textarea-group">
+          <textarea id="desc" name="description" placeholder="Type detail revision..." rows="3" required></textarea>
+
+          <div class="note-card" id="note" style="display:none;">
+            <p class="note-title"><strong>Note!!</strong></p>
+            <p>Please type the description with following this format:</p>
+            <p><span class="highlight">Revision text - Part of document</span></p>
+            <p><strong>Example :</strong><br>
+            <span class="highlight">Tolong photo ulang dengan jelas dan bentuk vertikal - MO File</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- File input -->
+        <input type="file" name="file" required>
+
+        <!-- Button -->
+        <button type="submit" class="btn">Add Revision</button>
+      </form>
+    </section>
+
+    <!-- Bottom Actions -->
+    <div class="actions">
+      <button class="btn-secondary" onclick="window.location.href='/eval_assigned'">Back</button>
+      <button class="btn">Pass</button>
+    </div>
+  </div>
+  <script>
+  const textarea = document.getElementById("desc");
+  const note = document.getElementById("note");
+
+  textarea.addEventListener("focus", () => {
+    note.style.display = "block";
+  });
+
+  textarea.addEventListener("blur", () => {
+    note.style.display = "none";
+  });
+</script>
+</body>
+</html>

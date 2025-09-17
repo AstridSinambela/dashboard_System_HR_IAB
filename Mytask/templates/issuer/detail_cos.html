@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COS Detail</title>
+    <link rel="stylesheet" href="/static/detail_cos.css?v=7" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <h1>Document Group Detail</h1>
+      <div class="header-actions">
+        <!-- detail_cos.html -->
+        {% if not missing_docs and cos.status != 1 %}
+          <button class="btn primary"
+            onclick="handleCirculate('{{ cos.id_cos }}', {{ 'true' if already_circulated else 'false' }})">
+            Ready to One Circulate
+          </button>
+        {% endif %}
+        <button class="btn secondary" onclick="window.location.href='/issuer/data_cos'">Back</button>
+      </div>
+    </header>
+
+    <!-- MAIN GRID -->
+    <main class="main-grid">
+      <!-- COS INFO -->
+      <section class="cos-info card">
+        <div><strong>Cos No :</strong> {{ cos.id_cos }}</div>
+        <div>
+          <strong>Status :</strong>
+          {% if cos.status == 1 %}
+            New
+          {% elif cos.status == 2 %}
+            Waiting Upload Evaluation
+          {% elif cos.status == 3 %}
+            Complete - Ready Send to Checker
+          {% elif cos.status == 4 %}
+            Complete - Waiting Approve Circulate
+          {% elif cos.status == 5 %}
+            Done
+          {% else %}
+            Unknown
+          {% endif %}
+        </div>
+        <div><strong>Create at :</strong> {{ cos.created_at.strftime("%Y-%m-%d") }}</div>
+        <div><strong>Update at :</strong> {{ cos.updated_at.strftime("%Y-%m-%d") if cos.updated_at else "-" }}</div>
+
+        <hr>
+        
+        {% if not missing_docs and cos.status >= 3 %}
+          <div id="final-doc-section">
+            <h3>📑 Final Document</h3>
+            <a href="/issuer/final_pdf/{{ cos.id_cos }}" target="_blank" class="link">👁 See Final Document</a>
+            <a href="/issuer/final_pdf/{{ cos.id_cos }}" download class="link">⬇ Download Final Document</a>
+          </div>
+        {% endif %}
+      </section>
+
+      <!-- DOCUMENTS -->
+      <section class="documents card">
+        <h2>Document List</h2>
+        {% if not documents %}
+          <p class="notice">No one file updated, Please upload all document!</p>
+        {% else %}
+          <ul>
+            {# tampilkan sesuai urutan fixed #}
+            {% for t in ["COS", "PFM", "WGS", "MO"] %}
+              {% for doc in documents if doc.doc_type == t %}
+                <li>
+                  {{ doc.doc_type }}: <span>{{ doc.file_name }}</span>
+                  <a href="/issuer/file/{{ cos.id_cos }}/{{ doc.id }}" target="_blank" class="link">👁 Preview</a>
+                  <a href="/issuer/file/{{ cos.id_cos }}/{{ doc.id }}" download class="link">⬇ Download</a>
+                </li>
+              {% endfor %}
+            {% endfor %}
+
+            {# terakhir semua OTHERS #}
+            {% for doc in documents if doc.doc_type == "OTHERS" %}
+              <li>
+                {{ doc.doc_type }}: <span>{{ doc.file_name }}</span>
+                <a href="/issuer/file/{{ cos.id_cos }}/{{ doc.id }}" target="_blank" class="link">👁 Preview</a>
+                <a href="/issuer/file/{{ cos.id_cos }}/{{ doc.id }}" download class="link">⬇ Download</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+
+      <!-- WARNINGS -->
+      <section class="warnings card">
+        <h2>Warning !</h2>
+
+        {% if cos.status == 1 %}
+        <div class="notice-operators">
+          <p>Please select several Operators document for this COS.</p>
+          <button class="btn warning" onclick="window.location.href='/issuer/add_cos?id_cos={{ cos.id_cos }}'">
+            Go to add Operators
+          </button>
+        </div>
+        {% endif %}
+
+        {% if missing_docs %}
+        <div class="notice danger">
+          <p><strong>Missing Documents:</strong></p>
+          <ul>
+            {% for r in missing_docs %}
+            <li>{{ r }} : -</li>
+            {% endfor %}
+          </ul>
+          <p>Please complete document for this COS.</p>
+          <button class="btn warning"
+            {% if cos.status == 1 %}
+              onclick="alert('Can\'t add document, please input operator first')"
+            {% else %}
+              onclick="window.location.href='/issuer/eval_report/{{ cos.id_cos }}'"
+            {% endif %}>
+            Go To Eval Report
+          </button>
+        </div>
+      {% else %}
+        <div class="notice success">
+          <p>✅ All required documents (COS, PFM, WGS, MO) are completed.</p>
+          <p>Have changes document?</p>
+          <button class="btn primary"
+            {% if cos.status == 1 %}
+              onclick="alert('Can\'t add document, please input operator first')"
+            {% else %}
+              onclick="window.location.href='/issuer/eval_report/{{ cos.id_cos }}'"
+            {% endif %}>
+            Go To Evaluation Report
+          </button>
+        </div>
+      {% endif %}
+      </section>
+    </main>
+
+    <!-- OPERATORS LIST -->
+    <section class="operators card">
+      <h2>List Operators</h2>
+      <div id="operators-container" class="operators-grid">
+        <!-- JS injects tables -->
+      </div>
+    </section>
+
+    <script>
+      function handleCirculate(id_cos, alreadyCirculated) {
+        if (alreadyCirculated) {
+          // Kalau sudah ada evaluation → langsung detail_circulate
+          window.location.href = `/issuer/detail_circulate?id_cos=${id_cos}`;
+        } else {
+          // Kalau belum → add_circulate
+          window.location.href = `/issuer/add_circulate?id_cos=${id_cos}`;
+        }
+      }
+      //beause this jinja, so but vs code know this is is js
+      // @ts-nocheck
+    document.addEventListener("DOMContentLoaded", () => {
+      const operators = [
+        {% for nik, name, pdf_id, pdf_path in operators %}
+          { nik: "{{ nik }}", name: "{{ name }}", pdf_id: "{{ pdf_id }}", pdf_path: "{{ pdf_path }}" },
+        {% endfor %}
+      ];
+
+      const container = document.getElementById("operators-container");
+      const total = operators.length;
+
+      let parts = 1;
+      if (total > 2 && total <= 8) parts = 2;
+      else if (total > 8) parts = 3;
+
+      const perPart = Math.ceil(total / parts);
+
+      for (let i = 0; i < parts; i++) {
+        const table = document.createElement("table");
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>NIK</th>
+              <th>Nama</th>
+              <th>File</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+        const chunk = operators.slice(i * perPart, (i + 1) * perPart);
+
+        chunk.forEach(op => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${op.nik}</td>
+            <td>${op.name}</td>
+            <td><a href="/issuer/operator_file/${op.pdf_id}" target="_blank" class="link">${op.pdf_path}</a></td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        container.appendChild(table);
+      }
+    });
+    </script>
+  </body>
+</html>

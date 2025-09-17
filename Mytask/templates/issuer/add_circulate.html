@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New Evaluation</title>
+  <link rel="stylesheet" href="/static/add_circulate.css?v=2">
+</head>
+<body>
+  <div class="page">
+    
+    <!-- Header -->
+    <header class="navbar">
+      <h1>Add New Evaluation</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+      <form method="post" action="/issuer/add_circulate">
+
+        <!-- Info Card -->
+        <div class="info-card">
+          <div class="cosno">
+            <label for="cos">Cos No :</label>
+            <input type="text" id="cos-input" name="id_cos" autocomplete="off" 
+                   placeholder="Type COS No..." value="{{ id_cos or '' }}" 
+                   {% if id_cos %}readonly{% endif %} />
+            <div id="suggestions" class="suggestions"></div>
+            <button type="button" class="btn-ok" {% if id_cos %}style="display:none;"{% endif %}>OK</button>
+          </div>
+
+          <div class="field">
+            <span>Status Document :</span>
+            <span id="doc-status" class="status"></span>
+          </div>
+          <div class="field">
+            <span>Status Evaluation :</span>
+            <span class="status red">New</span>
+          </div>
+          <div class="field">
+            <span>Issuer By :</span>
+            <span class="issuer"></span>
+          </div>
+        </div>
+
+        <!-- Workflow Steps -->
+        <div class="workflow">
+          <div class="step">
+            <h2>Issued</h2>
+            <div class="person">
+              {{ issuer.firstname }}
+            </div>
+          </div>
+
+          <div class="step">
+            <h2>Checked</h2>
+            <select name="checked_id" class="btn-select">
+              <option value="">Select</option>
+              {% for u in users_checked %}
+                <option value="{{ u.id }}">{{ u.firstname }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="step">
+            <h2>Approved</h2>
+            <select name="approved_id" class="btn-select">
+              <option value="">Select</option>
+              {% for u in users_approved %}
+                <option value="{{ u.id }}">{{ u.firstname }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="step">
+            <h2>QA Checked</h2>
+            <select name="qa_checked_id" class="btn-select">
+              <option value="">Select</option>
+              {% for u in users_qa_checked %}
+                <option value="{{ u.id }}">{{ u.firstname }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="step">
+            <h2>QA Approved</h2>
+            <select name="qa_approved_id" class="btn-select">
+              <option value="">Select</option>
+              {% for u in users_qa_approved %}
+                <option value="{{ u.id }}">{{ u.firstname }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button type="submit" class="btn-done">✅ Done - Send</button>
+          <button type="button" class="btn-cancel" onclick="window.history.back()">✖ Cancel</button>
+        </div>
+
+      </form>
+    </main>
+  </div>
+  <script>
+    const docs = {{ docs|tojson|safe }};
+    const input = document.getElementById("cos-input");
+    const suggestions = document.getElementById("suggestions");
+    const btnOk = document.querySelector(".btn-ok");
+
+    let cosConfirmed = false;
+    let selectedStatus = null;
+
+    // Fungsi untuk proses COS (dipakai OK & auto-load)
+    function processCos(idCos) {
+      const selected = docs.find(d => d.id_cos === idCos);
+      if (selected) {
+        const docStatusEl = document.getElementById("doc-status");
+        docStatusEl.textContent = selected.status_text;
+        docStatusEl.className = "status " + (selected.status_class || "green");
+
+        document.querySelector(".issuer").textContent = selected.issuer;
+        document.querySelector(".workflow .step .person").textContent = selected.issuer;
+
+        selectedStatus = selected.status;
+        if (selectedStatus === 3) {
+          cosConfirmed = true;
+        } else {
+          cosConfirmed = false;
+          alert("⚠ Status dokumen masih " + selected.status_text + ". Hanya status 'Complete - Ready to Approve' yang bisa dilanjutkan.");
+        }
+      } else {
+        alert("ID COS tidak valid");
+        cosConfirmed = false;
+        selectedStatus = null;
+      }
+    }
+
+    // 🔽 tampilkan suggestion
+    function showSuggestions(value) {
+      suggestions.innerHTML = "";
+      suggestions.classList.remove("active");
+      if (!value) return;
+
+      const matches = docs.filter(d =>
+        String(d.id_cos).toLowerCase().includes(value.toLowerCase())
+      );
+
+      if (matches.length > 0) {
+        suggestions.classList.add("active");
+        matches.slice(0, 10).forEach(m => {
+          const item = document.createElement("div");
+          item.className = "suggestion-item";
+          const regex = new RegExp(`(${value})`, "gi");
+          item.innerHTML = m.id_cos.replace(regex, "<span class='autocomplete-highlight'>$1</span>");
+          item.addEventListener("click", () => {
+            input.value = m.id_cos;
+            suggestions.innerHTML = "";
+            suggestions.classList.remove("active");
+          });
+          suggestions.appendChild(item);
+        });
+      }
+    }
+
+    // Event: ketik
+    input.addEventListener("input", () => showSuggestions(input.value));
+
+    // Event: klik luar
+    document.addEventListener("click", e => {
+      if (e.target !== input) {
+        suggestions.innerHTML = "";
+        suggestions.classList.remove("active");
+      }
+    });
+
+    // Event tombol OK manual
+    btnOk.addEventListener("click", () => processCos(input.value));
+
+    // ✅ AUTO jalankan kalau ada id_cos dari backend
+    {% if id_cos %}
+      window.addEventListener("DOMContentLoaded", () => {
+        processCos("{{ id_cos }}");
+      });
+    {% endif %}
+
+    // Blokir dropdown sebelum validasi
+    document.querySelectorAll(".btn-select").forEach(select => {
+      select.addEventListener("focus", e => {
+        if (!cosConfirmed || selectedStatus !== 3) {
+          e.target.blur();
+          alert("⚠ Anda hanya bisa memilih orang jika status dokumen = 'Complete - Ready to Approve'.");
+        }
+      });
+    });
+
+    // Blokir tombol Done sebelum validasi
+    document.querySelector(".btn-done").addEventListener("click", e => {
+      if (!cosConfirmed || selectedStatus !== 3) {
+        e.preventDefault();
+        alert("⚠ Anda hanya bisa kirim jika status dokumen = 'Complete - Ready to Approve'.");
+      }
+    });
+  </script>
+</body>
+</html>

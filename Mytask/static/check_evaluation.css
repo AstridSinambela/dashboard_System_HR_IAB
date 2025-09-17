@@ -1,0 +1,246 @@
+/* General */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #A7C3FF;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  height: 70px;
+  background: #005073;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 7px 4px rgba(0, 0, 0, 0.25);
+}
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px 40px;
+}
+
+/* Info Card */
+.info-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 7px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
+}
+.info-card p {
+  font-size: 16px;
+  margin: 6px 0;
+}
+.info-card .buttons {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  background: #007CBA;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #005f8a;
+}
+.btn-secondary {
+  background: #0D6FB5;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background: #094d7a;
+}
+.btn a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Revision Section */
+.revision-section {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 7px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px;
+}
+.revision-section h2 {
+  font-size: 20px;
+  color: #005073;
+  margin-bottom: 15px;
+}
+
+/* Header row */
+.revision-header {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.7fr;
+  gap: 15px;
+  padding: 10px;
+  border-bottom: 2px solid #005073;
+  font-weight: 600;
+  color: #005073;
+  background: #f0f6ff;
+  margin-bottom: 8px;
+}
+
+/* Row */
+.revision-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 0.8fr 0.7fr;
+  gap: 15px;
+  align-items: start;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.revision-row:last-child {
+  border-bottom: none;
+}
+
+/* Description agar rapi */
+.revision-row .desc {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  max-height: 80px;
+  overflow-y: auto;
+  padding-right: 5px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Upload link */
+.upload a {
+  color: #007CBA;
+  font-weight: 500;
+  text-decoration: none;
+}
+.upload a:hover {
+  text-decoration: underline;
+}
+
+/* Form Add Revision */
+.revision-form {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 15px;               /* lebih besar biar lega */
+  align-items: stretch;    /* semua elemen sama tinggi */
+}
+
+/* Textarea */
+.revision-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  resize: vertical;        /* bisa drag ke atas/bawah */
+  width: 100%;
+  height: 18px;
+  max-height: 200px;
+  min-height: 18px;
+  line-height: 1.5;
+}
+
+/* File input */
+.revision-form input[type="file"] {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Button */
+.revision-form .btn {
+  height: 100%;
+  min-height: 40px;
+  align-self: center;
+}
+
+/* Badges */
+.badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.badge-gray {
+  background: #eeeeee;
+  color: #555;
+}
+.badge-orange {
+  background: #fff6d6;
+  color: #c88700;
+}
+.badge-green {
+  background: #e0f8e9;
+  color: #2d9b47;
+}
+
+/* Bottom Actions */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Container untuk relative positioning */
+.textarea-group {
+  position: relative;
+  width: 100%;
+}
+
+/* Note Card mengambang di atas textarea */
+.note-card {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 6px;
+  background: #ffe6c9;      /* orange soft */
+  border: 1px solid #ffb366;
+  padding: 4px 8px;        /* padding kecil */
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.15);
+  width: 60%;
+  z-index: 10;
+  line-height: 1.4;
+}
+
+.note-card .note-title {
+  color: red;
+  font-weight: bold;
+  margin: 0 0 5px;
+}
+
+.note-card p {
+  margin: 4px 0;
+}
+
+.note-card .highlight {
+  background: #e0e0e0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}

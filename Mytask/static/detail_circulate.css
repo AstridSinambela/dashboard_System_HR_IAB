@@ -1,0 +1,158 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  background: #A7C3FF;
+  color: #000;
+  line-height: 1.5;
+}
+
+/* Header */
+.header {
+  background: #005073;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+}
+
+.header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* Wrapper utama */
+.content-wrapper {
+  background: #B5CEFF;
+  margin: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.15);
+}
+
+/* Info + Actions sejajar */
+.info-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Info Card */
+.info-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  font-size: 1rem;
+  flex: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Actions tombol di kanan atas */
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* Buttons */
+.btn {
+  background: #007CBA;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 12px;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-block;
+}
+
+.btn:hover {
+  background: #005f87;
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+}
+
+.back-btn {
+  background: #0D6FB5;
+  border-radius: 10px;
+}
+
+/* Circulation Track */
+.circulation {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.circulation h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #00334e;
+}
+
+/* Track fix berderet horizontal */
+.track {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: nowrap;       /* ❌ jangan wrap */
+  overflow-x: auto;        /* ✅ scroll kalau kepanjangan */
+  padding-bottom: 0.5rem;  /* biar ada ruang bawah scroll */
+}
+
+.step {
+  flex: 0 0 220px;         /* fix width tiap card */
+  min-width: 220px;
+  padding: 1rem;
+  border-radius: 15px;
+  text-align: center;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Logic warna berdasarkan status */
+.status-1 { background: grey; border: 2px solid #ccc; }     /* Waiting */
+.status-2 { background: yellow; color: #fff; }             /* In Progress */
+.status-3 { background: blue; color: #fff; }             /* Request Revisi */
+.status-4 { background: red; color: #fff; }             /* Request Revisi */
+.status-5 { background: green; color: #fff; }             /* Done */
+
+/* Heading */
+.step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  color: #00334e;
+}
+
+/* Name */
+.status {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Date & note */
+.date, .note {
+  font-size: 0.85rem;
+  margin: 0.2rem 0;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}

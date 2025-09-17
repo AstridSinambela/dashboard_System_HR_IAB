@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Evaluation</title>
+  <link rel="stylesheet" href="/static/eval_circulate.css?v=3">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar">
+    <h1>All Evaluation</h1>
+  </header>
+
+  <!-- Search Section -->
+  <section class="search-bar">
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input type="text" id="search-cos" placeholder="..... Search by ID COS">
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+    <button class="btn-new" onclick="window.location.href='/issuer/add_circulate'">New</button>
+  </section>
+
+  <!-- Status Info Card -->
+  <div class="status-info">
+    <h3>Note</h3>
+    <div class="status-items">
+      <div class="item"><span class="dot grey"></span> New (Waiting Document)</div>
+      <div class="item"><span class="dot yellow"></span> Need to Check</div>
+      <div class="item"><span class="dot blue"></span> Request Revision</div>
+      <div class="item"><span class="dot red"></span> Need to Revision</div>
+      <div class="item"><span class="dot green"></span> Approve</div>
+    </div>
+  </div>
+  <!-- Table Section -->
+  <section class="table-container">
+    <!-- Table Header -->
+    <div class="table-header">
+      <div>ID COS</div>
+      <div>Created at</div>
+      <div>Status</div>
+      <div>Issuer</div>
+      <div>Checked</div>
+      <div>Approve</div>
+      <div>QA Checked</div>
+      <div>QA Approve</div>
+    </div>
+    <!-- Table Rows -->
+    {% for doc in documents %}
+    <div class="table-row">
+      <div>
+        <a href="/issuer/detail_circulate?id_cos={{ doc.id_cos | urlencode }}" class="idcos-link">
+          {{ doc.id_cos }}
+        </a>
+      </div>
+      <div>{{ doc.created_at }}</div>
+      <div>
+        {% set status_map = {
+          1: "New",
+          2: "Waiting Checker",
+          3: "Need Revision from Checker",
+          4: "Waiting Approval",
+          5: "Need Revision from Approver",
+          6: "Waiting QA Check",
+          7: "Need Revision from QA Check",
+          8: "Waiting QA Approval",
+          9: "Need Revision from QA Approval",
+          10: "Completed"
+        } %}
+        {{ status_map.get(doc.status, "Unknown") }}
+      </div>
+      <div class="task">
+        {% if doc.issuer %}
+          <span class="name status-{{ doc.issuer.status }}">{{ doc.issuer.tasked_name }}</span>
+          <span class="date">{{ doc.issuer.updated_at.strftime("%d/%m/%Y") }}</span>
+        {% endif %}
+      </div>
+      <!-- Checked -->
+      <div class="task">
+        {% if doc.checked %}
+          <span class="name status-{{ doc.checked.status }}">{{ doc.checked.tasked_name }}</span>
+          <span class="date">{{ doc.checked.updated_at.strftime("%d/%m/%Y") }}</span>
+        {% endif %}
+      </div>
+
+      <div class="task">
+        {% if doc.approved %}
+          <span class="name status-{{ doc.approved.status }}">{{ doc.approved.tasked_name }}</span>
+          <span class="date">{{ doc.approved.updated_at.strftime("%d/%m/%Y") }}</span>
+        {% endif %}
+      </div>
+
+      <div class="task">
+        {% if doc.qa_checked %}
+          <span class="name status-{{ doc.qa_checked.status }}">{{ doc.qa_checked.tasked_name }}</span>
+          <span class="date">{{ doc.qa_checked.updated_at.strftime("%d/%m/%Y") }}</span>
+        {% endif %}
+      </div>
+
+      <div class="task">
+        {% if doc.qa_approved %}
+          <span class="name status-{{ doc.qa_approved.status }}">{{ doc.qa_approved.tasked_name }}</span>
+          <span class="date">{{ doc.qa_approved.updated_at.strftime("%d/%m/%Y") }}</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <script>
+  const ID_COS_LIST = {{ documents | map(attribute='id_cos') | list | tojson | safe }};
+  </script>
+  <script src="/static/eval_circulate.js"></script>
+</body>
+</html>
