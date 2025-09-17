@@ -1,0 +1,829 @@
+
+   
+   body {
+      font-family: 'Poppins', sans-serif;
+      background-color:  #cfe3f9d3;
+      padding-top: 0 !important;
+      transition: padding-top 0.4s ease;
+    }
+
+   .container {
+      margin-top: 2 px; /* beri jarak dari header */
+      margin-bottom: 0px;
+      padding: 20px;
+      transition: margin-top 0.4s ease;
+    }
+    .nav-link.active {
+      background-color: #005073; /* biru Bootstrap */
+      color: #fff !important;
+      border-radius: 0.375rem;
+      font-weight: 600; 
+    } 
+
+
+
+#operatorModal .modal-dialog {
+  max-width: 320px; /* ubah sesuai kebutuhan */
+
+}
+#operatorModal .modal-body {
+  padding: 4px; /* lebih compact */
+}
+
+#operatorModal .modal-content {
+  font-size: 11px;   /* default kecil untuk semua */
+   background-color: #c3d7f8 ;
+}
+
+/* Title modal */
+#operatorModal .modal-title {
+  font-size: 12px; /* lebih kecil dari default 16px */
+ 
+}
+
+/* Input search */
+#operatorModal #operatorSearch {
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+/* ===== Table Styling ===== */
+#operatorModal table {
+  font-size: 11px;
+  width: 100% !important;   /* paksa sesuai modal */
+}
+
+#operatorModal table th,
+#operatorModal table td {
+  padding: 2px 6px !important;
+  white-space: nowrap; /* biar rapat */
+}
+
+/* ===== DataTables Styling ===== */
+#operatorModal .dataTables_length,
+#operatorModal .dataTables_filter,
+#operatorModal .dataTables_info,
+#operatorModal .dataTables_paginate {
+  font-size: 10px !important;
+}
+
+/* Pagination */
+#operatorModal .dataTables_paginate {
+  font-size: 8px !important;
+}
+#operatorModal .dataTables_paginate .paginate_button {
+  padding: 1px 4px !important;
+  margin: 0 1px !important;
+  font-size: 8px !important;
+  min-width: 10px !important;
+  line-height: 1.2 !important;
+}
+#operatorModal .dataTables_info {
+  font-size: 11px !important;
+  margin-top: 2px;
+}
+
+/* search box kecil */
+#operatorModal .dataTables_filter input {
+ font-size: 11px !important;
+  padding: 2px 4px !important;
+  height: 15px !important;
+  width: 70px !important; /* atur panjangnya biar ga kepanjangan */
+}
+#operatorModal .dataTables_length select {
+  font-size: 10px !important;
+  padding: 2px 4px !important;
+  height: 22px !important;
+  width: auto !important;   /* biar ga kepanjangan */
+  display: inline-block;
+}
+
+#operatorModal .dataTables_length label {
+  font-size: 10px !important;
+}
+
+/* Search box */
+#operatorModal .dataTables_filter label {
+  font-size: 10px !important;
+}
+
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
+.modal {
+  z-index: 1060 !important;
+}
+
+.modal-dialog,
+.modal-content {
+  position: relative;
+  z-index: auto !important;
+}
+
+    /* Loading Overlay hapus */
+
+
+    .loading-box {
+      background: #ffffff00;
+      padding: 30px 40px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      animation: fadeInUp 0.4s ease;
+    }
+
+    .loading-box p {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #333;
+    }
+
+    /* Spinner Modern */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e0e0e0;
+      border-top: 4px solid #005073;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Animations */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+
+ .cert-screwing {
+ margin-left: 4px;
+
+  }
+
+
+
+#form-status-card td.waiting { background-color: #ffc400; }
+#form-status-card td.new { background-color: #cfe2ff; }
+#form-status-card td.closed { background-color: #12d42b; color: #0f5132; }
+
+.cert-screwing{
+  table-layout: fixed;
+}
+.cert-screwing th,
+.cert-screwing td {
+  text-align: center;
+  width: calc(100% / 3); /* karena 3 kolom */
+}
+
+.table-profile input,
+.table-profile select,
+.table-cert input,
+.table-cert select {
+  font-size: 10px !important;   /* kecilkan font */
+  padding: 2px 4px !important;  /* rapatkan padding */
+  height: 24px !important;      /* tinggi lebih kecil */
+  border-radius: 4px !important;
+  box-sizing: border-box;       /* biar ikut ukuran cell */
+}
+
+.cert-certification,
+.cert-evaluation {
+  position: relative;
+  padding-right: 0px;
+  min-height: auto;
+   display: flex;
+  flex-direction: column;
+}
+
+.cert-screwing,
+.cert-soldering {
+  width: 23%;
+}
+
+.cert-simulation {
+  width: 10%;
+}
+
+
+.row.mt-1 {
+  display: flex-start;
+  align-items: stretch;
+  flex-wrap: wrap; 
+}
+    .photo-frame {
+      width: 110px;
+      height: 150px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #f0f0f0;
+      border: 2px solid #007cba;
+      margin-bottom: 0 !important;
+       margin-right: 0px;
+       margin-left:0;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      padding: 0px;
+    }
+
+    .table-profile {
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 2px solid white;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+      padding: 0px;
+      width: 100%;
+      margin-bottom: 0 !important;
+    }
+
+    .table-profile th {
+      background: linear-gradient(135deg, #007cba, #005073);
+      color: white;
+      text-align: center;
+      font-weight: 600;
+      border: none;
+      padding: 5px;
+      font-size: 11px;
+    }
+
+    .table-profile td {
+      background-color: #f9fbff;
+      border: none;
+      padding: 4px 6px;
+      vertical-align: middle;
+    }
+
+    .table-profile td:first-child {
+      font-weight: 600;
+      background-color: #e9f5ff;
+      color: #005073;
+      border-right: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      font-size: 11px; 
+      padding: 3px 5px; 
+    }
+
+    .table-profile input,
+    .table-profile select {
+      font-size: 11px;
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin: 0;
+      height: 28px;
+    }
+
+    .table-profile tr:last-child td {
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .table-profile.mb-3 {
+      margin-bottom: 0rem !important; /* lebih rapat antar tabel */
+    }
+
+    #search-nik-btn {
+      padding: 3px 10px;    /* kecilkan tombol */
+      font-size: 11px;
+      height: 26px;
+      border-radius: 6px;
+    }
+
+    #form-status-card {
+      font-size: 11px;
+      padding: 2px 6px !important;
+      text-align: center;
+    }
+    #form-status-text {
+      font-size: 11px;
+    }
+
+    .row.g-4,
+    .row.gx-4,
+    .row.gy-3 {
+      --bs-gutter-x: 0.rem;  
+      --bs-gutter-y: 0 rem;  
+    }
+
+    .card-body {
+      padding-bottom: 0.25rem; /* default biasanya 1.25rem */
+    }
+
+
+    header.navbar-custom {
+      background-color: #005073;
+      color: white;
+      padding: 10px 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1030 !important;
+    }
+
+    .logo-img {
+      height: 32px;
+    }
+
+    .offcanvas-header {
+      background-color: #005073;
+      color: white;
+      padding-top: 80px;
+    }
+
+    .offcanvas .nav-link {
+      color: #333;
+      font-size: 15px;
+    }
+
+    .offcanvas .nav-link:hover {
+      color: #005073;
+    }
+
+    .btn-logout {
+      border: 1px solid red;
+      color: red;
+      font-weight: bold;
+    }
+
+    .btn-logout:hover {
+      background-color: red;
+      color: white;
+    }
+
+    .offcanvas-start { width: 260px; }
+
+    h4.section-title {
+      font-weight: 600;
+      color: #008ed4;
+      border-bottom: 3px solid #004a7875;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .status-pass {
+      background-color: rgb(18, 205, 4);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 5px;
+      display: inline-block;
+      font-weight: 300;
+    }
+
+    .upload-status span {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+
+.status-notyet {
+  background-color: rgba(220, 21, 21, 0.904);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 5px;
+  display: inline-block;
+  font-weight: 300;
+}
+
+.table-cert td,
+.table-cert th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+th.cert-header {
+  background: linear-gradient(135deg, #cacbcb, #fff4d6);
+  color: #005073;
+}
+
+/* === 5 & 6. Button Choose File + View File (Evaluation Report) === */
+#uploadCertTable .btn,
+.table-cert .btn {
+  font-size: 10px;
+  padding: 2px 6px;
+  height: 26px;
+
+}
+
+.cert-evaluation .btn-custom {
+    border-radius: 6px;
+  font-weight: 600;
+  padding: 6px 18px;
+  border: none;
+  color: #004b78;
+  background: linear-gradient(135deg, #7ccdff, #bceffdd6);
+  box-shadow: 0 3px 6px rgba(137, 90, 90, 0.2);
+ 
+}
+
+.cert-evaluation .btn-custom i {
+  color: #005073; /* ikon mata jadi kuning biar kontras */
+  margin-right: 4px;
+}
+
+
+/* === 7. Button View File Certification Skills === */
+.btn-download,
+.btn-upload-trigger {
+  font-size: 11px;
+  padding: 2px 6px;
+  height: 26px;
+}
+
+/* Certification Skills */
+#uploadCertTable th,
+#uploadCertTable td {
+  white-space: nowrap;   
+}
+
+/* Certification (nama skill) kecil */
+#uploadCertTable th:nth-child(1),
+#uploadCertTable td:nth-child(1) {
+  width: 8%;  /* sekecil mungkin */
+}
+
+/* No. Document → paling lebar */
+#uploadCertTable th:nth-child(2),
+#uploadCertTable td:nth-child(2) {
+  width: 52%;  /* prioritas besar */
+}
+
+/* Doc. (upload file) kecil */
+#uploadCertTable th:nth-child(3),
+#uploadCertTable td:nth-child(3) {
+  width: 10%;
+}
+
+/* Status kecil */
+#uploadCertTable th:nth-child(4),
+#uploadCertTable td:nth-child(4) {
+  width: 10%;
+}
+
+/* Training Date kecil */
+#uploadCertTable th:nth-child(5),
+#uploadCertTable td:nth-child(5) {
+  width: 10%;
+}
+
+/* Expired Date kecil */
+#uploadCertTable th:nth-child(6),
+#uploadCertTable td:nth-child(6) {
+  width: 10%;
+}
+
+/* === 8. Tulisan "Soldering, Screwing, MSA" (Certification Skills) === */
+#uploadCertTable td strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cert-screening,
+.cert-msa {
+  flex: 0 0 50% !important;    /* Membuat lebih besar */
+  max-width: 50% !important;   /* Menambah ukuran maksimum */
+  padding-left: 1px !important;  /* Memberikan padding kiri sedikit lebih besar */
+  padding-right: 1px !important; /* Memberikan padding kanan sedikit lebih besar */
+}
+
+
+.cert-screening table,
+.cert-msa table {
+  width: 100% !important;
+  table-layout: fixed;
+}
+
+
+
+/* Certification */
+.cert-certification {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+/* Evaluation*/
+.cert-evaluation {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-left: 2px;
+}
+
+
+
+#saveBtn {
+  display: inline-block;
+  font-size: 13px !important;
+  padding: 6px 16px !important;
+  border-radius: 6px !important;
+  margin-top: 1.5rem !important; /* lebih turun */
+    flex-shrink: 0; 
+}
+
+
+/* === 9 & 10. Tulisan "Standard / Score" di MSA & Data Screening === */
+.msa-table td,
+.msa-table th,
+.screening-table td,
+.screening-table th {
+  font-size: 11px;
+  padding: 3px 5px;
+}
+
+
+/* Custom Button Styles */
+.btn-custom {
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 6px 18px;
+  border: none;
+  color: #004b78;
+  background: linear-gradient(135deg, #7ccdff, #bceffdd6);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-custom:hover {
+  background: linear-gradient(135deg, #b6cff3, #308cc2fd );
+  color: #ffffff;
+}
+
+.msa-table {
+  table-layout: fixed;
+}
+
+.msa-table th,
+.msa-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.dropdown-item.active-selection {
+  background-color: #e9f5ff;
+  font-weight: bold;
+  color: #007cba;
+}
+
+.cert-disabled {
+  pointer-events: none;        
+  opacity: 0.6;                 
+  background-color: #eaeaea;   
+  filter: blur(1px); 
+  transition: all 0.3s ease-in-out;
+}
+
+.table-profile th,
+.table-profile td {
+  padding: 3px 6px !important; /* perkecil padding isi tabel */
+  font-size: 0.85rem; 
+  /* table-layout: fixed; */
+}
+
+.row.gx-0 {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Line Simulation lebih rapat ke atas */
+.cert-simulation {
+  margin-top: 0 !important; /* tarik naik */
+  margin-bottom: 0 !important; /* kecilkan jarak bawah */
+}
+
+.line-simulation-table {
+  margin-bottom: 0.5rem !important; /* kecilkan jarak bawah */
+
+}
+
+.cert-soldering table {
+  margin-bottom: 4px !important; /* kecilkan jarak bawah soldering */
+}
+
+
+/* Responsive fix - kalau layar < 992px, stack atas bawah */
+@media (max-width: 991.98px) {
+  .cert-certification,
+  .cert-evaluation,
+  .cert-screening,
+  .cert-msa{
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 12px;
+  }
+}
+
+/*kolom Screening Data sama besar */
+.screening-table {
+  table-layout: fixed;
+}
+
+.screening-table th,
+.screening-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* kolom Line Simulation sama besar */
+.line-simulation-table {
+  table-layout: fixed;
+}
+
+
+
+.line-simulation-table input,
+.line-simulation-table select {
+  width: auto !important;   /* jangan full 100% */
+  min-width: 91px;          /* biar gak ketutup banget */
+  max-width: 91px;          /* biar kecil */
+  padding: 2px 4px;         /* kecilin padding input */
+  font-size: 0.8rem;        /* kecilin font */
+}
+
+ input[type="file"] {
+    background-color: #eaeaea !important;
+    border: 1px solid #ccc;
+    padding: 6px;
+    color: #333;
+    border-radius: 6px;
+  }
+
+  input[type="text"], input[type="number"], input.form-control {
+  text-align: center;
+}
+
+.cert-certification input[type="date"] {
+  width: 83px; 
+  }
+
+.cert-certification input[type="text"] {
+  width: 160px; 
+
+}
+
+#uploadCertTable th:nth-child(3),
+#uploadCertTable td:nth-child(3) {
+  width: 1%;        /* sekecil mungkin */
+  white-space: nowrap;
+}
+
+
+/* Input Result Styles */
+.input-result-pass {
+  background-color: #c8f7c5 !important;
+  color: rgb(14, 141, 12);
+  font-weight: 600;
+}
+
+.input-result-fail {
+  background-color: #f8d7da !important;
+  color: rgba(255, 0, 0, 0.904);
+  font-weight: 600;
+}
+
+.is-invalid {
+  border: 1.5px solid #ff0019 !important; /* merah Bootstrap */
+  background-color: #c9f8fb;
+}
+
+/* Tooltip khusus NIK */
+.nik-tooltip {
+  position: absolute;
+  top: -25px;  /* muncul di atas input */
+  left: 0;
+  background: #dc3545; /* merah */
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1200 !important;
+}
+
+.nik-tooltip.show {
+  opacity: 1;
+}
+
+.nik-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 15px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #dc3545 transparent transparent transparent;
+}
+
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f0f8ff !important;
+  transition: 0.2s ease;
+}
+.col-md-2, .col-md-3, .col-md-4 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+
+/* Hapus fixed width & biarkan isi yang tentukan */
+.screening-table,
+.line-simulation-table,
+.msa-table,
+.table-cert {
+  width: auto !important;         /* tidak full 100% */
+  table-layout: auto !important;  /* biarkan konten yang atur */
+  margin: 0 auto;                 /* rata tengah */
+  border-collapse: collapse;      /* rapatkan */
+}
+
+.cert-evaluation .table-cert {
+   width: 100% !important;   /* isi penuh parent */
+  table-layout: fixed !important;
+  margin: 0 !important;     /* jangan auto center */
+}
+
+.cert-certification table.table-cert {
+  width: 100% !important;
+  table-layout: auto !important;
+  margin: 0 !important;
+}
+
+.cert-certification .table-cert,
+.cert-evaluation .table-cert {
+  flex: 1; /* isi tinggi penuh parent */
+}
+
+/* Biar cell tidak terlalu lega */
+.screening-table th,
+.screening-table td,
+.line-simulation-table th,
+.line-simulation-table td,
+.msa-table th,
+.msa-table td,
+.table-cert th,
+.table-cert td {
+  width: 1%;
+  width:min-content;
+  white-space: nowrap;   /* kolom sekecil mungkin */
+  padding: 4px 8px;      /* lebih rapat */
+  font-size: 11px;
+}
+
+.table-cert {
+
+  table-layout: fixed;
+}
+
+/* Hilangkan padding kolom supaya foto & tabel menempel */
+.col-md-2.p-0,
+.col-md-3.p-0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Hilangkan padding default kolom */
+.col-md-2, 
+.col-md-3, 
+.col-md-4 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Rapatkan antar tabel */
+.table-profile th,
+.table-profile td,
+.table-cert th,
+.table-cert td {
+  padding: 3px 6px !important;
+  font-size: 11px !important;
+}
+
+#form-status-card,
+.contract-status-table {
+  width: 100% !important;
+  margin-bottom: 4px !important; /* rapatkan */
+}
+

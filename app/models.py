@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Date, Numeric, DateTime, LargeBinary, ForeignKey
+from sqlalchemy import func
 from datetime import datetime
 from .database import Base
 from pydantic import BaseModel, Field
@@ -6,6 +7,22 @@ from sqlalchemy import Column, Text
 from sqlalchemy.dialects.mssql import CHAR
 from sqlalchemy.orm import relationship
 from typing import Optional
+
+class User(Base):
+    __tablename__ = "T_user"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    name = Column(String(50), nullable=False)
+    email = Column(String(100), unique=True, index=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    firstname = Column(String(50))
+    lastname = Column(String(50))
+    fullname = Column(String(100))
+    gender = Column(Integer)  # 0/1
+    role_id = Column(Integer)  # 1=admin, 2=hr, 3=
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
 
 class TMOperator(Base):
     __tablename__ = "TM_Operator"
@@ -78,5 +95,11 @@ class EvaluationDocument(Base):
     op_train_eval = Column("OpTrainEval", Text, nullable=False)
     op_skills_eval = Column("OpSkillsEval", Text, nullable=False)
     train_eval = Column("TrainEval", Text, nullable=False)
-    eval_number = Column("EvalNumber", String(50), nullable=False)
-    # operator = relationship("TMOperator", back_populates="certification_documents")
+
+class PDFOPT(Base):
+    __tablename__ = "T_PDFOPT"
+
+    id = Column("Id", Integer, primary_key=True, index=True)
+    nik = Column("NIK", String(8), index=True, nullable=False)
+    merged_pdf = Column("MergedPDF", Text, nullable=False)
+    created_at = Column("CreatedAt", DateTime, server_default=func.now())

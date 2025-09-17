@@ -1,38 +1,34 @@
-   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-/*.nav-link.active {
-  font-weight: 600;
-  color: #0d6efd !important;  /* biru bootstrap */
- /* background-color: #e9ecef;  /* abu lembut */
-/*  border-radius: 6px;
-}*/
-
-
-
 .nav-link.active {
-  background-color: #0d6efd; /* biru Bootstrap */
-  color: #fff !important;
-  border-radius: 0.375rem;
-  font-weight: 600; 
-} 
+    background-color: #0d6efd; /* biru Bootstrap */
+    color: #fff !important;
+    border-radius: 0.375rem;
+    font-weight: 600; 
+  }  
 
+  .container {
+      margin-top: 55px; /* beri jarak dari header */
+      margin-bottom: 0px;
+      padding: 20px;
+      transition: margin-top 0.4s ease;
+    }
   
+
 .status-card {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 10px 15px;
-    height: 50px;
+    gap: 4px;
+    padding: 5px 10px;
+    height: 36px;
     width: 100%;
     background-color: white;
     border: 2px solid #00bfff;
     border-radius: 10px;
     font-family: 'Poppins', sans-serif;
-    font-size: 16px;
+    font-size: 11px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     text-align: center;
-    margin-top: 10px;
+    margin-top: 4px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -57,13 +53,15 @@
    body {
       font-family: 'Poppins', sans-serif;
       background-color: #d5ddf2;
-      padding-top: 80px;
+      padding-top: 0 !important; /* space for navbar */
+      font-size: 11px !important; ;
+      transition: padding-top 0.4s ease;
     }
 
     .photo-frame {
-      width: 150px;
-      height: 190px;
-      border-radius: 12px;
+      width: 110px;
+      height: 150px;
+      border-radius: 10px;
       overflow: hidden;
       background-color: #f0f0f0;
       border: 2px solid #007cba;
@@ -76,13 +74,16 @@
     }
 
     .table-profile {
-      border-collapse: separate;
+     border-collapse: separate;
       border-spacing: 0;
       border: 2px solid white;
       border-radius: 12px;
       overflow: hidden;
       background-color: #ffffff;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
+      padding: 0px;
+      width: 100%;
+      margin-bottom: 0 !important;
     }
 
     .table-profile th {
@@ -91,45 +92,51 @@
       text-align: center;
       font-weight: 600;
       border: none;
-      padding: 12px;
-      font-size: 15px;
+      padding: 4px;
+      font-size: 11px;
     }
 
     .table-profile td {
-      background-color: #f9fbff;
+       background-color: #f9fbff;
       border: none;
-      padding: 10px 14px;
+      padding: 4px 6px;
       vertical-align: middle;
     }
 
     .table-profile td:first-child {
       font-weight: 600;
       background-color: #e9f5ff;
-      width: 35%;
       color: #005073;
       border-right: 1px solid #ffffff;
       border-left: 1px solid #ffffff;
+      font-size: 11px; 
+      padding: 3px 5px; 
+      table-layout: fixed;
     }
 
     .table-profile input,
     .table-profile select {
-      font-size: 14px;
-      padding: 6px 10px;
+      font-size: 11px;
+      padding: 4px 6px;
       border-radius: 6px;
       border: 1px solid #ccc;
+      margin: 0;
+      height: 26px;
+      table-layout: fixed;
     }
 
     .table-profile tr:last-child td {
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px;
     }
 
     header.navbar-custom {
       background-color: #005073;
       color: white;
       padding: 10px 20px;
-      height: 60px;
+      height:60px;
       display: flex;
+      font-size: 14px;
       align-items: center;
       justify-content: space-between;
       position: fixed;
@@ -138,6 +145,93 @@
       right: 0;
       z-index: 1050;
     }
+
+
+    #operatorModal .modal-dialog {
+  max-width: 320px; /* ubah sesuai kebutuhan */
+  z-index: 2000;
+}
+#operatorModal .modal-body {
+  padding: 4px; /* lebih compact */
+}
+
+#operatorModal .modal-content {
+  font-size: 11px;   /* default kecil untuk semua */
+   background-color: #c3d7f8 ;
+}
+
+/* Title modal */
+#operatorModal .modal-title {
+  font-size: 12px; /* lebih kecil dari default 16px */
+ 
+}
+
+/* Input search */
+#operatorModal #operatorSearch {
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+/* ===== Table Styling ===== */
+#operatorModal table {
+  font-size: 11px;
+  width: 100% !important;   /* paksa sesuai modal */
+}
+
+#operatorModal table th,
+#operatorModal table td {
+  padding: 2px 6px !important;
+  white-space: nowrap; /* biar rapat */
+}
+
+/* ===== DataTables Styling ===== */
+#operatorModal .dataTables_length,
+#operatorModal .dataTables_filter,
+#operatorModal .dataTables_info,
+#operatorModal .dataTables_paginate {
+  font-size: 10px !important;
+}
+
+/* Pagination */
+#operatorModal .dataTables_paginate {
+  font-size: 8px !important;
+}
+#operatorModal .dataTables_paginate .paginate_button {
+  padding: 1px 4px !important;
+  margin: 0 1px !important;
+  font-size: 8px !important;
+  min-width: 10px !important;
+  line-height: 1.2 !important;
+}
+#operatorModal .dataTables_info {
+  font-size: 11px !important;
+  margin-top: 2px;
+}
+
+/* search box kecil */
+#operatorModal .dataTables_filter input {
+ font-size: 11px !important;
+  padding: 2px 4px !important;
+  height: 15px !important;
+  width: 70px !important; /* atur panjangnya biar ga kepanjangan */
+}
+#operatorModal .dataTables_length select {
+  font-size: 10px !important;
+  padding: 2px 4px !important;
+  height: 22px !important;
+  width: auto !important;   /* biar ga kepanjangan */
+  display: inline-block;
+}
+
+#operatorModal .dataTables_length label {
+  font-size: 10px !important;
+}
+
+/* Search box */
+#operatorModal .dataTables_filter label {
+  font-size: 10px !important;
+}
+
 
     .logo-img {
       height: 32px;
@@ -170,28 +264,20 @@
     }
 
     .offcanvas-start { width: 260px; }
-
-    h4.section-title {
-      font-weight: 600;
-      color: #008ed4;
-      border-bottom: 3px solid #004a7875;
-      padding-bottom: 6px;
-      margin-bottom: 20px;
-    }
     
     .status-pass {
-  background-color: rgb(18, 205, 4);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-  display: inline-block;
-  font-weight: 500;
-}
+      background-color: rgb(18, 205, 4);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      font-weight: 500;
+    }
 
 .status-notyet {
   background-color: rgba(220, 21, 21, 0.904);
   color: white;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   display: inline-block;
   font-weight: 500;
@@ -208,14 +294,19 @@ th.cert-header {
   color: #005073;
 }
 
+.row.screening-msa {
+  --bs-gutter-x: 2px; /* atur jarak horizontal antar col */
+}
+
 /* Custom Button Styles */
 .btn-custom {
   border-radius: 6px;
   font-weight: 600;
-  padding: 6px 18px;
+  padding: 3px 10px;
+  font-size: 10px;
   border: none;
   color: #004b78;
-  background: linear-gradient(135deg, #bceffd, #fdfdfd);
+  background: linear-gradient(135deg, #7ccdff, #bceffdd6);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -224,9 +315,28 @@ th.cert-header {
   color: #ffffff;
 }
 
+.btn-save {
+  padding: 8px 15px;  
+  font-size: 12px;     
+  border-radius: 8px;
+  margin-top: -1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.btn-save:hover {
+  transform: scale(1.05);
+}
+
+
 .msa-table {
-  table-layout: f ixed;
+  table-layout: fixed;
   width: 100%;
+}
+
+.cert-screwing,
+.cert-soldering {
+  width: 260px;
 }
 
 .msa-table th,
@@ -276,7 +386,6 @@ th.cert-header {
 /*kolom Screening Data sama besar */
 .screening-table {
   table-layout: fixed;
-  width: 100%;
 }
 
 .screening-table th,
@@ -294,7 +403,7 @@ th.cert-header {
 
 .line-simulation-table th,
 .line-simulation-table td {
-  width: 25%;
+  width: 20%;
   text-align: center;
   vertical-align: middle;
 }
@@ -335,7 +444,7 @@ th.cert-header {
   color: white;
   font-weight: 500;
   font-size: 0.875rem;
-  padding: 6px 10px;
+  padding: 2px 6px;
   border-radius: 6px;
 }
 
@@ -343,17 +452,40 @@ th.cert-header {
   padding: 4px 8px;
 }
 
+/* Khusus line simulation biar lebih panjang */
+.cert-line {
+  width: 525px !important;  
+}
+
+.cert-line th,
+.cert-line td {
+  padding: 2px 4px;
+  text-align: center;
+}
+
+
+.cert-line,
+.cert-screening,
+.cert-msa,
+.cert-certification {
+  font-size: 10px !important;
+  table-layout: auto !important;
+  height: auto;
+}
 
 .tooltip-error {
   position: absolute;
-  top: -38px;
+  top: -25px;
   left: 0;
   background: #dc3545;
   color: #fff;
-  font-size: 13px;
-  padding: 6px 12px;
-  border-radius: 6px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
   white-space: nowrap;
+   max-width: none;             /* batasi lebar biar gak dorong */
+  overflow: visible;             /* sembunyikan teks lebih */
+  text-overflow: unset;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   z-index: 10;
   animation: fadeIn 0.3s ease-in-out;
@@ -389,7 +521,7 @@ th.cert-header {
   animation: shake 0.3s;
 }
 
-.fade {
+.custom-fade {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
@@ -421,4 +553,36 @@ th.cert-header {
   border-left: 4px solid #005073; 
 }
 
+.footer-cert p {
+  font-size: 16px;    
+  margin-top: -2px;    
+  margin-bottom: 0;  
+}
+
+.footer-cert {
+  margin-top: 0px; /* jarak kecil dari tombol Save */
+}
+
+
+/* Batasi lebar input NIK */
+#nik {
+  max-width: 140px;   /* lebar maksimum input */
+  flex: 0 1 auto;     /* biar bisa shrink kalau terhimpit */
+}
+
+/* Pastikan tombol search tidak ikut membesar */
+#search-nik-btn {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spinner kecil dan rapat */
+#spinner {
+  margin-left: 4px !important;
+}
 

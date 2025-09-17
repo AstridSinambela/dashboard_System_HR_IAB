@@ -5,25 +5,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Operator's Profile </title>
+  <button class="btn text-white me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainMenu">
+      <i class="bi bi-list fs-3"></i>
+  </button>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="static/style/dataTables.bootstrap5.min.css">
 
   <!-- Bootstrap & Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <link href="../static/IAB.css" rel="stylesheet">
+  <link href="static/style/bootstrap.min.css" rel="stylesheet">
+  <link href="static/style/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/style/css2.css" rel="stylesheet">
+  <link href="static/style/aos.css" rel="stylesheet">
+  <link href="../static/IAB1.css" rel="stylesheet">
   <link rel="icon" href="static/assets/img/logoo.jpg" type="image/x-icon" />
-  
 </head>
 
 <body>
+
+
   <!-- HEADER -->
   <header class="navbar navbar-custom fixed-top shadow-sm px-3">
-    <button class="btn text-white me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainMenu">
+   <button class="btn text-white me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainMenu">
       <i class="bi bi-list fs-3"></i>
     </button>
     <div class="d-flex align-items-center">
-      <span class="fw-semibold text-white d-none d-sm-inline">Evaluation Skills Operator IAB</span>
+      <span class="fw-semibold text-white d-none d-sm-inline">Evaluation Report by IAB</span>
     </div>
     <img src="static/assets/img/omron-logo.png" alt="OMRON Logo" class="logo-img">
   </header>
@@ -39,16 +46,8 @@
         <a class="nav-link ms-3" href="/home">Home</a> 
         <hr>
         <strong class="text-dark">Data Operator</strong>
-        <a class="nav-link ms-3" href="/profile">Data by HR</a>
         <a class="nav-link ms-3 active" href="/IAB">Data by IAB</a> 
         <hr>
-        <strong class="text-dark">Evaluation Report</strong>
-        <a class="nav-link ms-3" href="/data">View Data</a>
-        <!-- <a class="nav-link ms-3" href="approval.html">Document Approval</a>
-        <a class="nav-link ms-3" href="status.html">Document Status</a>
-        <hr>
-        <a class="nav-link" href="matrix.html">Flexibility Matrix</a>
-        <hr> -->
         <button class="btn btn-outline-danger btn-logout mt-2" onclick="window.location.href='/logout'">Logout</button>
       </nav>
     </div>
@@ -56,29 +55,28 @@
 
   <!-- MAIN CONTENT -->
   <div class="container">
-    <h4 class="section-title" data-aos="fade-down">Evaluation Report by IAB</h4>
 
     <!-- Profile Row -->
-    <!-- Profile Row -->
-    <div class="row gx-4 gy-3 align-items-start" data-aos="zoom-in">
+    <div class="row gx-10gy-2 align-items-start" data-aos="zoom-in">
       <!-- FOTO -->
-      <div class="col-md-2">
+      <div class=" col-auto align-items-start">
         <div class="photo-frame">
           <img src="static/assets/img/profile-iconn.png" alt="Photo" id="photo-preview">
         </div>
       </div>
 
       <!-- PERSONAL DETAILS -->
-      <div class="col-md-6">
-        <table class="table table-bordered table-profile mb-3 table-cert">
+      <div class="col-md-3 p-1">
+        <table class="table table-bordered table-profile mb-1 table-cert">
           <thead><tr><th colspan="2">Personal Details</th></tr></thead>
           <tbody>
+            
             <tr><td>NIK</td><td>
               <div class="form-group position-relative d-flex align-items-center">
-              <div id="nik-tooltip" class="tooltip-error d-none">Invalid NIK</div>
                 <input type="text" id="nik" class="form-control" placeholder="Enter NIK">
-              <button class="btn btn-custom ms-2" type="button" id="search-nik-btn">🔎
-                <span id="spinner" class="spinner-border spinner-border-sm ms-2" role="status" style="display:none"></span>
+                  <div id="nik-tooltip" class="nik-tooltip"></div>
+                  <button class="btn btn-custom ms-1" type="button" id="search-nik-btn">🔎
+                <span id="spinner" class="spinner-border spinner-border-sm ms-1" role="status" style="display:none"></span>
               </button>
             </div>
             <div id="search-alert" class="alert-custom alert-danger d-none"></div>
@@ -90,11 +88,28 @@
           </tbody>
         </table>
       </div>
-      
+    
+
 
       <!-- STATUS -->
-      <div class="col-md-4">
-        <table class="table table-bordered table-profile mb-3 ">
+      <div class="col-md-2 px-1">
+          <!-- Form Status -->
+          <table class="table-bordered table-profile mb-2" id="form-status-card">
+            <tbody>
+            <tr class="card-body py-1">
+            <td>
+            <!-- <h6 class="card-title mb-2"></h6> -->
+              <p id="form-status-text" class="mb-0">
+                <i class="bi bi-clock me-1"></i>
+                Waiting for search...
+              </p>
+              </td>
+            </tr>
+          </tbody>      
+        </table> 
+
+      <!-- CONTRACT STATUS -->
+        <table class="table table-bordered table-profile mb-1 ">
           <thead><tr><th colspan="2">Contract Status</th></tr></thead>
           <tbody>
             <tr>
@@ -106,31 +121,13 @@
             <tr><td colspan="2"><input type="text" id="end-date" class="form-control" readonly></td></tr>
           </tbody>
         </table>
-
-        <!-- Form Status -->
-    <div class="col-md-12">
-      <div class="card shadow-sm border-info mb-3" id="form-status-card">
-        <div class="card-body py-2">
-         <!-- <h6 class="card-title mb-2"></h6> -->
-          <p id="form-status-text" class="mb-0">
-            <i class="bi bi-clock me-1"></i>
-             Waiting for search...
-          </p>
-        </div>
+      
       </div>
-    </div> 
-
-      </div>
-    </div>
-
-   
-
-<!-- CERTIFICATION EVALUATION FORM -->
-<div class="mt-4" id="certificationEvaluation">
-  <div class="row g-4">
-
-     <div class="col-md-6 cert-screwing">
-      <table class="table table-bordered table-profile mb-3">
+     
+       
+    <!-- Screwing -->
+     <div class="col-md-2 p-0 cert-screwing">
+      <table class="table table-bordered table-profile mb-1">
         <thead>
           <tr><th colspan="3">Screwing (Score : ≥ 80)</th></tr>
           <tr class="col-3-equal">
@@ -138,7 +135,6 @@
           <th class="cert-header">Work</th>
           <th class="cert-header">Result</th>
         </tr>
-
         </thead>
         <tbody>
           <tr>
@@ -148,10 +144,44 @@
           </tr>
         </tbody>
       </table>
-    </div>
+      
+      <div class="mb-0 cert-simulation">
+      <table class="table table-bordered table-profile mb-3 line-simulation-table">
+        <thead>
+          <tr><th colspan="5">Line Simulation</th></tr>
+         <tr class="col-4-equal">
+          <th class="cert-header">Process</th>
+          <th class="cert-header">Target</th>
+          <th class="cert-header">Actual</th>
+          <th class="cert-header">Achievement</th>
+          <th class="cert-header">Result</th>
+          </tr>
 
-         <!-- Soldering -->
-    <div class="col-md-6 cert-soldering">
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select class="form-select cert-line-process">
+                <option value="">Select</option>
+                <option value="OPT#1">OPT#1</option>
+                <option value="OPT#2">OPT#2</option>
+                <option value="OPT#3">OPT#3</option>
+                <option value="OPT#4">OPT#4</option>
+              </select>
+            </td>
+            <td><input type="text" class="form-control cert-line-target" disabled readonly></td>
+            <td><input type="number" class="form-control cert-line-actual" readonly></td>
+            <td><input type="text" class="form-control cert-line-achievement" disabled readonly></td>
+            <td><input type="text" class="form-control cert-line-result" disabled readonly></td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+     </div>
+
+     <!-- Soldering -->
+    <div class="col-md-2 p-0 cert-soldering">
       <table class="table table-bordered table-profile mb-3">
         <thead>
           <tr><th colspan="3">Soldering (Score : ≥ 80)</th></tr>
@@ -171,44 +201,15 @@
         </tbody>
       </table>
     </div>
-       
-    <!-- Line Simulation -->
-    <div class="col-md-12 cert-line">
-      <table class="table table-bordered table-profile mb-3 line-simulation-table">
-        <thead>
-          <tr><th colspan="5">Line Simulation</th></tr>
-         <tr class="col-4-equal">
-          <th class="cert-header">Process</th>
-          <th class="cert-header">Target</th>
-          <th class="cert-header">Actual</th>
-          <th class="cert-header">Achievement</th>
-          <th class="cert-header">Result</th>
-          </tr>
 
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <select class="form-select cert-line-process">
-                <option value=""> -- Select --</option>
-                <option value="OPT#1">OPT#1</option>
-                <option value="OPT#2">OPT#2</option>
-                <option value="OPT#3">OPT#3</option>
-                <option value="OPT#4">OPT#4</option>
-              </select>
-            </td>
-            <td><input type="text" class="form-control cert-line-target" disabled readonly></td>
-            <td><input type="number" class="form-control cert-line-actual" readonly></td>
-            <td><input type="text" class="form-control cert-line-achievement" disabled readonly></td>
-            <td><input type="text" class="form-control cert-line-result" disabled readonly></td>
-          </tr>
-        </tbody>
-      </table>
- 
     </div>
 
+<!-- CERTIFICATION EVALUATION FORM -->
+<div class="mt-1" id="certificationEvaluation">
+  <div class="row mt-1" data-aos="zoom-in">
+ 
     <!-- Screening Data -->
-    <div class="col-md-12 cert-screening">
+    <div class="col-md-6 cert-screening">
       <table class="table table-bordered table-profile mb-3 screening-table">
         <thead>
           <tr><th colspan="6">Data Screening</th></tr>
@@ -220,11 +221,10 @@
             <th class="cert-header">MCC</th>
             <th class="cert-header">Result</th>
           </tr>
-
         </thead>
         <tbody>
           <tr>
-            <td><strong>Standard</strong></td>
+            <td>Standard</td>
             <td>≥ 14</td>
             <td>≥ 55</td>
             <td>≥ 80</td>
@@ -233,7 +233,7 @@
           </tr>
 
           <tr>
-            <td><strong>Score</strong></td>
+            <td>Score</td>
             <td><input type="number" class="form-control cert-input" readonly></td>
             <td><input type="number" class="form-control cert-input" readonly></td>
             <td><input type="number" class="form-control cert-input" readonly></td>
@@ -244,30 +244,8 @@
       </table>
     </div>
 
-<!-- Soldering Expert -->
-<!--     <div class="col-md-5 cert-screwing">
-      <table class="table table-bordered table-profile mb-3">
-        <thead>
-          <tr><th colspan="3">Solderinng Expert (Score : ≥ ..)</th></tr>
-          <tr class="col-3-equal">
-          <th class="cert-header">Written</th>
-          <th class="cert-header">Practical</th>
-          <th class="cert-header">Result</th>
-        </tr> 
-
-        </thead>
-        <tbody>
-          <tr>
-            <td><input type="text" class="form-control cert-input" disabled></td>
-            <td><input type="text" class="form-control cert-input" disabled></td>
-            <td><input type="text" class="form-control cert-input" disabled readonly></td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
-
     <!-- MSA Assessment -->
-    <div class="col-md-12 cert-msa">
+    <div class="col-md-8 cert-msa">
       <table class="table table-bordered table-profile mb-3 msa-table">
         <thead>
           <tr><th colspan="6">MSA Assessment</th></tr>
@@ -282,7 +260,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Standard</strong></td>
+            <td>Standard</td>
             <td>≥ 90%</td>
             <td>≤ 2%</td>
             <td>≤ 5%</td>
@@ -301,22 +279,20 @@
         </tbody>
       </table>
     </div>
-  </div>
-</div>
 
-<!--  Certification Skiils -->
-<div class="row mt-4">
-  <div class="col-12">
+  <div class="row mt-1 g-1" data-aos="zoom-in">
+    <!--  Certification Skiils -->
+  <div class="col-md-6 cert-certification" >
     <table id="uploadCertTable" class="table table-bordered table-profile table-cert mb-3">
       <thead>
         <tr><th colspan="6">Certification Skills</th></tr>
         <tr>
-          <th class="cert-header" style="width: 16.6%;">Certification</th>
-          <th class="cert-header" style="width: 16.6%;" readonly>No. Document</th>
-          <th class="cert-header" style="width: 16.6%;" readonly>Upload Doc.</th>
-          <th class="cert-header" style="width: 16.6%;">Status</th>
-          <th class="cert-header" style="width: 16.6%;" readonly>Training Date</th>
-          <th class="cert-header" style="width: 16.6%;" readonly>Expired Date</th>
+          <th class="cert-header" >Certification</th>
+          <th class="cert-header" readonly>No. Document</th>
+          <th class="cert-header" readonly>Doc.</th>
+          <th class="cert-header">Status</th>
+          <th class="cert-header"readonly>Training Date</th>
+          <th class="cert-header"readonly>Expired Date</th>
         </tr>
       </thead>
       <tbody>
@@ -326,10 +302,10 @@
           <td> <input type="file" class="form-upload d-none" accept=".pdf">
             <button type="button" class="btn btn-sm btn-custom w-100 btn-upload-trigger">
             <span class="btn-label">Upload File</span> </button> <button type="button" class="btn btn-sm btn-custom btn-download d-none" title="Download">
-            <i class="bi bi-download"></i></button> <div class="progress mt-1 d-none">
+            <i class="bi bi-download"></i>View</button> <div class="progress mt-1 d-none">
             <div class="progress-bar" role="progressbar" style="width: 0%">0%</div></div> </td>
           <td class="upload-status"><span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span></td>
-          <td><input type="date" class="form-control upload-training"/></td>
+          <td><input type="date" class="form-control upload-training" readonly/></td>
           <td><input type="date" class="form-control upload-expired" readonly /></td>
         </tr>
         <tr>
@@ -338,10 +314,10 @@
           <td><input type="file" class="form-upload d-none" accept=".pdf">
             <button type="button" class="btn btn-sm btn-custom w-100 btn-upload-trigger">
             <span class="btn-label">Upload File</span> </button> <button type="button" class="btn btn-sm btn-custom btn-download d-none" title="Download">
-            <i class="bi bi-download"></i></button> <div class="progress mt-1 d-none">
+            <i class="bi bi-download"></i>View</button> <div class="progress mt-1 d-none">
             <div class="progress-bar" role="progressbar" style="width: 0%">0%</div></div> </td>
           <td class="upload-status"><span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span></td>
-          <td><input type="date" class="form-control upload-training"/></td>
+          <td><input type="date" class="form-control upload-training" readonly /></td>
           <td><input type="date" class="form-control upload-expired" readonly /></td>
         </tr>
         <tr>
@@ -350,85 +326,112 @@
           <td> <input type="file" class="form-upload d-none" accept=".pdf">
             <button type="button" class="btn btn-sm btn-custom w-100 btn-upload-trigger">
             <span class="btn-label">Upload File</span> </button><button type="button" class="btn btn-sm btn-custom btn-download d-none" title="Download">
-            <i class="bi bi-download"></i></button> <div class="progress mt-1 d-none">
+            <i class="bi bi-download"></i>View</button> <div class="progress mt-1 d-none">
             <div class="progress-bar" role="progressbar" style="width: 0%">0%</div></div> </td>
           <td class="upload-status"><span class="status-notyet"><i class="bi bi-x-circle-fill"></i> Not Yet</span></td>
-          <td><input type="date" class="form-control upload-training"/></td>
+          <td><input type="date" class="form-control upload-training"  readonly/></td>
           <td><input type="date" class="form-control upload-expired" readonly /></td>
         </tr>
       </tbody>
     </table>
+  </div>
 
     <!-- Evaluation Report Upload -->
-<div class="mt-4">
+<div class="col-md-8 cert-evaluation">
   <table class="table table-bordered table-profile table-cert mb-3">
     <thead>
-      <tr><th colspan="2">Evaluation Report</th></tr>
+      <tr><th colspan="3">Evaluation Report</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>Operator Training & Evaluation</strong></td>
-        <td><input type="file" class="form-control form-upload"  id="fileTrainingEval" accept=".pdf" /></td>
+        <td>Operator Training & Evaluation</td>
+        <td><input type="file" class="btn btn-custom  required-field"  id="fileTrainingEval" accept=".pdf" /></td>
+          <td><button type="button" id="viewTrainingEval" class="btn btn-custom d-none" title="View File">
+            <i class="bi bi-eye-fill"></i> View File </button> </td>
       </tr>
       <tr>
-        <td><strong>Operator Skills Evaluation</strong></td>
-        <td><input type="file" class="form-control form-upload"  id="fileSkillsEval" accept=".pdf"/></td>
+        <td>Operator Skills Evaluation</td>
+        <td><input type="file" class="btn btn-custom  required-field"  id="fileSkillsEval" accept=".pdf"/></td>
+        <td><button type="button" id="viewSkillsEval" class="btn btn-custom d-none" title="View File">
+    <i class="bi bi-eye-fill"></i> View File </button></td>
       </tr>
       <tr>
-        <td><strong>Training in Evaluation</strong></td>
-        <td><input type="file" class="form-control form-upload" id="fileTrainingInEval"accept=".pdf"/></td>
+        <td>Training in Line Evaluation</td>
+        <td><input type="file" class="btn btn-custom  required-field" id="fileTrainingInEval"accept=".pdf"/></td>
+      <td><button type="button" id="viewTrainingInEval" class="btn btn-custom d-none" title="View File">
+    <i class="bi bi-eye-fill"></i> View File </button></td>
       </tr>
     </tbody>
   </table>
 </div>
-
-<!-- Auto Generate No Evaluation -->
-<!-- Wrapper 1 baris untuk tombol dan form -->
-<div class="row mt-4 align-items-center">
-  <!-- Tombol di kiri -->
-  <div class="col-md-2 text-start">
-    <button class="btn btn-custom w-100"  id="generateBtn">Generate</button>
-  </div>
-
-  <!-- Form Generate -->
-  <div class="col-md-10">
-    <table class="table table-bordered table-profile table-cert text-center mb-0">
-      <thead>
-        <tr>
-          <th>Evaluation Number for Personal Operator</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td id="evaluationNumber">...</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-  </div>
 </div>
+ 
+
 
     <!-- Save Button -->
-    <div class="text-end mt-4">
-      <button id="saveBtn" class="btn btn-custom">Save</button>
+    <div class="text-end mt-1">
+      <!--<button id="updateBtn" class="btn btn-warning d-none">Update</button> -->
+      <button id="saveBtn" class="btn btn-custom">Save</button> 
     </div>
-  </div>
+
+</div>
+</div>
 </div>
 
-  <!-- JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Global Loading --> 
+      <div class="bg-white rounded-4 shadow-lg p-4 text-center d-none">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 mb-0 fw-semibold text-dark">Saving your data...</p>
+      </div>
+
+ 
+    <!-- OPERATOR MODAL -->
+  <div class="modal fade" id="operatorModal" tabindex="-1" aria-labelledby="operatorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content shadow-sm rounded-3 border-0">
+      <div class="modal-header py-1 px-2">
+        <h6 class="modal-title fw-bold small" id="operatorModalLabel">Search Operator</h6>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-1">
+      <div class="table-responsive">
+        <!-- Search box -->
+         <table id="operatorTable" class="table table-hover table-sm align-middle table-striped mb-0 small">
+            <thead class="table-profile sticky-top" style="background-color:#ccdbea;">
+              <tr>
+                <th class="py-1 px-2">NIK</th>
+                <th class="py-1 px-2">Name</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>     
+
+ 
+  <!--  JS -->
+  <script src="static/style/jquery-3.6.0.min.js"></script>
+  <script src="static/style/jquery.dataTables.min.js"></script>
+  <script src="static/style/dataTables.bootstrap5.min.js"></script>
+
+  <script src="static/style/bootstrap.bundle.min.js"></script>
+  <script src="static/style/aos.js"></script>
   <script>AOS.init();</script>
-  <script src="/static/Work.js"></script>
-  <!-- <script>
+  <script src="/static/Logic.js"></script>
+  <script>
   checkLogin(); // prevent access without login
-  </script> -->
+  </script>
+
+<footer class="text-center mt-2">
+  <p class="text-muted">&copy; 2025 OMRON Manufacturing of Indonesia</p>
+  </footer>
+
 
 </body>
 
-<footer class="text-center mt-5">
-  <p class="text-muted">&copy; 2025 OMRON Manufacturing of Indonesia</p>
-  </footer>
 
 </html>
